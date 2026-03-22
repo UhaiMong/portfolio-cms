@@ -32,15 +32,15 @@ app.use(
 );
 
 // Middleware
-// app.use(
-//   cors({
-//     origin:[
-//      "https://www.frontend.com",
-//      "https://www.dashboard.com",
-//      ]
-//     credentials: true,
-//   }),
-// );
+app.use(
+  cors({
+    origin: [
+      "https://portfolio-cms-teal.vercel.app",
+      "https://portfolio-cms-q8ju.vercel.app",
+    ],
+    credentials: true,
+  }),
+);
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
