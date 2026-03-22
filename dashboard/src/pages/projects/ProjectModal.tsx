@@ -60,7 +60,6 @@ export default function ProjectModal({ project, onClose }: Props) {
 
   //  Project images state
   const [images, setImages] = useState<string[]>(project?.images ?? []);
-  console.log(images);
 
   // React Hook Form
   const {
