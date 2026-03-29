@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ui/ScrollToTop";
 import PageLoader from "../components/ui/PageLoader";
 import { getBanner, getBio, getProjects } from "../services/portfolioService";
+import ChatBot from "../pages/chatBoot/ChatBoot";
 
 const Layout = () => {
   const [isReady, setIsReady] = useState(false);
@@ -29,6 +30,7 @@ const Layout = () => {
       <Outlet />
       <Footer />
       {/* Scroll to top */}
+      <ChatBot />
       <ScrollToTop />
     </div>
   );

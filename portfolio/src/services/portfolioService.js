@@ -11,6 +11,11 @@ export const getBio = async () => {
   const res = await api.get("/bio");
   return res.data.data;
 };
+// Context
+export const getContext = async () => {
+  const res = await api.get("/context");
+  return res.data.data;
+};
 
 // Projects
 export const getProjects = async (params = {}) => {

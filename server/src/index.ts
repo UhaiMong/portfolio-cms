@@ -14,6 +14,7 @@ import bannerRoutes from "./routes/bannerRoutes";
 import resumeRoutes from "./routes/resumeRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import mediaRoutes from "./routes/mediaRoutes";
+import chatbootRoutes from "./routes/chatbootRoutes";
 
 const app: Application = express();
 
@@ -32,15 +33,16 @@ app.use(
 );
 
 // Middleware
-app.use(
-  cors({
-    origin: [
-      "https://portfolio-cms-teal.vercel.app",
-      "https://portfolio-cms-q8ju.vercel.app",
-    ],
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "https://portfolio-cms-teal.vercel.app",
+//       "https://portfolio-cms-q8ju.vercel.app",
+//     ],
+//     credentials: true,
+//   }),
+// );
+app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -62,6 +64,7 @@ app.use("/api/banner", bannerRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/media", mediaRoutes);
+app.use("/api/chatboot", chatbootRoutes);
 
 // 404 handler
 app.use("/{*path}", (req: Request, res: Response) => {
