@@ -1,3 +1,5 @@
+import { RiRobot2Line } from "react-icons/ri";
+
 // Typing indicator
 function TypingDots() {
   return (

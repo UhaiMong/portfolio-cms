@@ -18,35 +18,37 @@ import chatbootRoutes from "./routes/chatbootRoutes";
 
 const app: Application = express();
 
-// Security header
+// Security headers
 app.use(helmet());
-// Compress response
+// Compress responses
 app.use(compression());
 
 // Rate limiting
 app.use(
   "/api",
   rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 100,
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP
   }),
 );
 
-// Middleware
-// app.use(
-//   cors({
-//     origin: [
-//       "https://portfolio-cms-teal.vercel.app",
-//       "https://portfolio-cms-q8ju.vercel.app",
-//     ],
-//     credentials: true,
-//   }),
-// );
-app.use(cors());
+// CORS
+if (process.env.NODE_ENV === "production") {
+  app.use(
+    cors({
+      origin: [process.env.DASHBOARD_URL!, process.env.CLIENT_URL!],
+      credentials: true,
+    }),
+  );
+} else {
+  app.use(cors());
+}
+
+// Body parsers
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-//  Health check
+// Health check
 app.get("/api/health", (req: Request, res: Response) => {
   res.json({
     success: true,
@@ -55,7 +57,7 @@ app.get("/api/health", (req: Request, res: Response) => {
   });
 });
 
-//  Routes (we'll add these in step 3+)
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/blog", blogRoutes);

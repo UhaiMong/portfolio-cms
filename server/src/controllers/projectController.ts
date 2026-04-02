@@ -37,6 +37,31 @@ export const getAllProjects = catchAsync(
   },
 );
 
+// GET /archives/:slug
+export const getProjectDetails = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+
+  const project = await Project.findOne({ slug });
+
+  if (!project) return sendError(res, 404, "Project not found");
+
+  const [prev, next] = await Promise.all([
+    Project.findOne({ order: { $lt: project.order } })
+      .sort({ order: -1 })
+      .select("title slug thumbnail"),
+
+    Project.findOne({ order: { $gt: project.order } })
+      .sort({ order: 1 })
+      .select("title slug thumbnail"),
+  ]);
+
+  sendSuccess(res, 200, "Project fetched", {
+    project,
+    prev,
+    next,
+  });
+};
+
 // GET /api/projects/:slug
 export const getProjectBySlug = catchAsync(
   async (req: Request, res: Response) => {

@@ -10,7 +10,7 @@ import { useData } from "../context/DataContext";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/projects", label: "Works" },
+  { to: "/archives", label: "All Work" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
 ];

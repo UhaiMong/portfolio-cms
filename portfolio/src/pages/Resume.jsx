@@ -128,34 +128,22 @@ export default function Resume({ resume, loading, error, onDownload }) {
 
   // Main render
   return (
-    <div className="flex flex-col gap-5 w-full">
+    <div className="flex flex-col items-center shrink-0 gap-5">
       {/* Header card */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-gray-800 border border-gray-700">
-        {/* File info */}
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-11 h-11 rounded-xl bg-linear-to-br from-green-500 to-green-600 border border-green-500 flex items-center justify-center shrink-0">
-            <FiFileText size={20} className="text-green-400" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-white font-semibold text-sm truncate">
-              {resume.fileName}
-            </p>
-            <div className="flex items-center gap-2 mt-0.5">
-              {resume.isActive && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  Active
-                </span>
-              )}
-              <span className="text-[11px] text-gray-500">
-                v{resume.version}
-              </span>
-            </div>
-          </div>
-        </div>
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between shrink-0 gap-4 p-5 rounded-2xl bg-gray-800 border border-gray-700">
         {/* Action buttons */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="w-full flex items-center gap-2 shrink-0">
+          <div className="">
+            {resume.isActive && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                Active
+              </span>
+            )}
+            <span className="text-[11px] text-gray-500 ml-3">
+              v{resume.version}
+            </span>
+          </div>
           {/* Open in new tab */}
           <a
             href={getPdfUrl(resume.fileUrl)}

@@ -1,5 +1,3 @@
-import { FaCircleDot } from "react-icons/fa6";
-
 // Renders markdown-lite: bold, bullets
 function MarkdownText({ text }) {
   const lines = text.split("\n");
@@ -26,7 +24,8 @@ function MarkdownText({ text }) {
           >
             {isBullet && (
               <span style={{ color: "var(--accent)", marginRight: 4 }}>
-                <FaCircleDot />{" "}
+                {" "}
+                •{" "}
               </span>
             )}
             {parts}

@@ -7,6 +7,7 @@ import {
   deleteProject,
   toggleFeatured,
   reorderProjects,
+  getProjectDetails,
 } from "../controllers/projectController";
 import { protect } from "../middleware/auth";
 
@@ -15,6 +16,7 @@ const router = Router();
 // Public
 router.get("/", getAllProjects);
 router.get("/:slug", getProjectBySlug);
+router.get("/archive/:slug", getProjectDetails);
 
 // Protected
 router.use(protect);

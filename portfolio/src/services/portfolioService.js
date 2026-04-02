@@ -27,6 +27,10 @@ export const getProjectBySlug = async (slug) => {
   const res = await api.get(`/projects/${slug}`);
   return res.data.data;
 };
+export const getArchiveDetailsBySlug = async (slug) => {
+  const res = await api.get(`/projects/archive/${slug}`);
+  return res.data.data;
+};
 
 // Blog
 export const getBlogs = async (params = {}) => {

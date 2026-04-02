@@ -71,7 +71,7 @@ export default function ProjectsPage({ standalone = true }) {
             className="grid grid-cols-12 gap-6"
             style={{ minHeight: "72vh" }}
           >
-            {/* ── LEFT: List / Detail  */}
+            {/* LEFT: List / Detail  */}
             <div className="md:col-span-6 col-span-12">
               <div
                 className="
