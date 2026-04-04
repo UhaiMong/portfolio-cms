@@ -19,10 +19,7 @@ router.get("/", getBio);
 
 // Protected
 router.use(protect);
-router.post("/avatar", uploadImage.single("avatar"), (req, res) => {
-  if (!req.file) throw new AppError("No file uploaded", 400);
-  sendSuccess(res, 200, "Avatar uploaded", { url: req.file.path });
-});
+
 router.post("/", createBio);
 router.patch("/:id", updateBio);
 router.patch("/:id/skills", updateSkills);

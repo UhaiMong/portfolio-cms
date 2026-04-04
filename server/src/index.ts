@@ -1,6 +1,6 @@
+import cors from "cors";
 import "dotenv/config";
 import express, { Application, Request, Response } from "express";
-import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
@@ -24,25 +24,31 @@ app.use(helmet());
 app.use(compression());
 
 // Rate limiting
-app.use(
-  "/api",
-  rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP
-  }),
-);
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per window
+  standardHeaders: true, // return rate limit info in the RateLimit-* headers
+  legacyHeaders: false, // disable the X-RateLimit-* headers
+});
+
+app.use("/api", apiLimiter);
 
 // CORS
-if (process.env.NODE_ENV === "production") {
-  app.use(
-    cors({
-      origin: [process.env.DASHBOARD_URL!, process.env.CLIENT_URL!],
-      credentials: true,
-    }),
-  );
-} else {
-  app.use(cors());
-}
+const allowedOrigins = process.env.CORS_ORIGINS?.split(",") || [];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 // Body parsers
 app.use(express.json({ limit: "10mb" }));

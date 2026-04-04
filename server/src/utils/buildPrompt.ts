@@ -23,9 +23,13 @@ Never make up information. If something isn't in the context, say "I don't have 
 ## Personal Info
 Name: ${bio?.name || "N/A"}
 Title: ${bio?.title || "N/A"}
+ShortTitle: ${bio?.subtitle || "N/A"}
 Email: ${bio?.email || "N/A"}
+Phone: ${bio?.phone || "N/A"}
+ProfileAvatar: ${bio?.avatar || "N/A"}
 Location: ${bio?.location || "N/A"}
 About: ${bio?.about || "N/A"}
+SocialLinks: ${bio?.socialLinks?.map((e: any) => `- ${e.icon} : ${e.platform} Account URL: ${e.url}`)}
 
 ## Skills
 ${bio?.skills?.join(", ") || "N/A"}

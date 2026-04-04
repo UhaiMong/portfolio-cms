@@ -173,7 +173,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                   Thumbnail <span className="text-red-400">*</span>
                 </label>
                 <div
-                  onClick={openThumbnailPicker} // ✅ opens single-select picker
+                  onClick={openThumbnailPicker}
                   className="relative border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-xl cursor-pointer transition-colors overflow-hidden h-44"
                 >
                   {thumbnail ? (

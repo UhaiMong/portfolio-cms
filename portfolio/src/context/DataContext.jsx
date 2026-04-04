@@ -15,29 +15,31 @@ export const DataProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const loadGlobalData = async () => {
+    try {
+      const [bioData, bannerData, resumeData] = await Promise.allSettled([
+        getBio(),
+        getBanner(),
+        getActiveResume(),
+      ]);
+      if (bioData.status === "fulfilled") setBio(bioData.value);
+      if (bannerData.status === "fulfilled") setBanner(bannerData.value);
+      if (resumeData.status === "fulfilled") setResume(resumeData.value);
+    } catch (err) {
+      setError(err);
+      console.error("Failed to load global data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadGlobalData = async () => {
-      try {
-        const [bioData, bannerData, resumeData] = await Promise.allSettled([
-          getBio(),
-          getBanner(),
-          getActiveResume(),
-        ]);
-        if (bioData.status === "fulfilled") setBio(bioData.value);
-        if (bannerData.status === "fulfilled") setBanner(bannerData.value);
-        if (resumeData.status === "fulfilled") setResume(resumeData.value);
-      } catch (err) {
-        setError(err);
-        console.error("Failed to load global data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     loadGlobalData();
   }, []);
-
   return (
-    <DataContext.Provider value={{ bio, banner, resume, loading, error }}>
+    <DataContext.Provider
+      value={{ bio, banner, resume, loading, error, refetch: loadGlobalData }}
+    >
       {children}
     </DataContext.Provider>
   );

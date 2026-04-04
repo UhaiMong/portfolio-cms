@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   User,
@@ -21,6 +21,7 @@ import {
 } from "../../src/features/bio/bioSlice";
 import api from "../../src/services/api";
 import LoadingOverlay from "../../src/components/ui/LoadingOverlay";
+import MediaPickerModal from "../media/Mediapickermodal";
 
 type Tab = "basic" | "skills" | "experience" | "education" | "social";
 
@@ -36,14 +37,17 @@ const inputCls =
   "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-indigo-500 transition-colors";
 const labelCls = "block text-xs font-medium text-gray-400 mb-1.5";
 
+type PickerMode = "avatar" | null;
+
 export default function BioPage() {
   const dispatch = useAppDispatch();
   const { bio, loading } = useAppSelector((s) => s.bio);
   const [tab, setTab] = useState<Tab>("basic");
   const [saving, setSaving] = useState(false);
-  const [avatarPrev, setAvatarPrev] = useState("");
-  const [avatar, setAvatar] = useState<File | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [newAvatar, setNewAvatar] = useState<string>("");
+  const [pickerMode, setPickerMode] = useState<PickerMode>(null);
+  const openAvatarPicker = () => setPickerMode("avatar");
+  const closePicker = () => setPickerMode(null);
 
   // Basic fields
   const [basic, setBasic] = useState({
@@ -86,28 +90,12 @@ export default function BioPage() {
     setEducation(bio.education || []);
     setSocial(bio.socialLinks || []);
   }, [bio]);
-  let avatarUrl = basic.avatar;
 
   const handleSave = async () => {
     setSaving(true);
-
-    if (avatar) {
-      const fd = new FormData();
-      fd.append("avatar", avatar);
-      try {
-        const res = await api.post("/bio/avatar", fd, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        avatarUrl = res.data.data.url;
-      } catch {
-        toast.error("Avatar upload failed");
-        setSaving(false);
-        return;
-      }
-    }
     const payload = {
       ...basic,
-      avatar: avatarUrl,
+      avatar: newAvatar,
       skills,
       experience,
       education,
@@ -122,14 +110,7 @@ export default function BioPage() {
     else toast.error("Failed to save bio");
     setSaving(false);
   };
-
-  // Avatar image set
-  const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    setAvatar(f);
-    setAvatarPrev(URL.createObjectURL(f));
-  };
+  console.log("new avatar: ", newAvatar);
 
   // Skills helpers
   const addSkill = () =>
@@ -228,7 +209,7 @@ export default function BioPage() {
 
       {/* Tab content */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-        {/* ── Basic Info ── */}
+        {/*  Basic Info */}
         {tab === "basic" && (
           <div className="space-y-4">
             {/* Image: Avatar */}
@@ -236,13 +217,13 @@ export default function BioPage() {
               <div className="">
                 <label className={labelCls}>Avatar</label>
                 <div
-                  onClick={() => fileRef.current?.click()}
+                  onClick={openAvatarPicker}
                   className="relative border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-xl cursor-pointer transition-colors w-32 h-32 overflow-hidden"
                 >
-                  {avatarPrev ? (
+                  {bio?.avatar ? (
                     <img
-                      src={avatarPrev}
-                      alt="preview"
+                      src={newAvatar ? newAvatar : bio.avatar}
+                      alt={bio?.name}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -252,13 +233,13 @@ export default function BioPage() {
                     </div>
                   )}
                 </div>
-                <input
+                {/* <input
                   ref={fileRef}
                   type="file"
                   accept="image/*"
                   className="hidden"
                   onChange={onAvatarChange}
-                />
+                /> */}
               </div>
               {/* Name */}
               <div className="flex-1">
@@ -714,6 +695,13 @@ export default function BioPage() {
           </div>
         )}
       </div>
+      {/* Thumbnail picker — single select */}
+      <MediaPickerModal
+        open={pickerMode === "avatar"}
+        onClose={closePicker}
+        allowedTypes={["image"]}
+        onSelect={(url) => setNewAvatar(url)}
+      />
     </div>
   );
 }

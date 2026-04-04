@@ -10,6 +10,7 @@ import { HiSparkles } from "react-icons/hi2";
 import api from "../../services/api";
 import AIMessage from "./AIMessage";
 import TypingDots from "./TypingDots";
+import { toast } from "react-hot-toast";
 
 const WELCOME =
   "Hi! I'm an AI assistant for this portfolio. Ask me anything about skills, experience, or projects! ✨";
@@ -71,6 +72,7 @@ export default function ChatBot() {
           content: "Oops! Something went wrong. Please try again.",
         },
       ]);
+      toast.error(messages);
     } finally {
       setLoading(false);
     }
