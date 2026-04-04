@@ -9,6 +9,8 @@ import AboutTab from "./aboutme/AboutTab";
 import TimelineItem from "./aboutme/TimelineItem";
 import EmptyState from "./aboutme/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
+import useFetch from "../hooks/useFetch";
+import { getProjectStats } from "../services/portfolioService";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 //  Tabs
@@ -16,6 +18,7 @@ const TABS = ["About", "Skills", "Experience", "Education", "Resume"];
 
 // Main About component
 export default function About({ standalone = true }) {
+  const { data } = useFetch(getProjectStats);
   const { bio, resume, loading, error, refetch } = useData();
   const [activeTab, setActiveTab] = useState("About");
   console.log(bio);
@@ -158,7 +161,7 @@ export default function About({ standalone = true }) {
                       label: "Technologies",
                     },
                     { num: `${bio.education?.length || 0}`, label: "Degrees" },
-                    { num: "20+", label: "Projects" },
+                    { num: data ? data : "20+", label: "Projects" },
                   ].map(({ num, label }) => (
                     <motion.div
                       key={label}

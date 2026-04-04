@@ -23,6 +23,11 @@ export const getProjects = async (params = {}) => {
   return res.data.data;
 };
 
+export const getProjectStats = async () => {
+  const res = await api.get("/projects/stats");
+  return res.data.data;
+};
+
 export const getProjectBySlug = async (slug) => {
   const res = await api.get(`/projects/${slug}`);
   return res.data.data;

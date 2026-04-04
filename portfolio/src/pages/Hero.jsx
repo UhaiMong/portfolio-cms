@@ -7,6 +7,8 @@ import {
 } from "framer-motion";
 import { useData } from "../context/DataContext";
 import { useTheme } from "../context/ThemeContext";
+import useFetch from "../hooks/useFetch";
+import { getProjectStats } from "../services/portfolioService";
 
 // Simple typewriter hook
 function useTypewriter(texts = [], speed = 80, pause = 2000) {
@@ -40,7 +42,9 @@ function useTypewriter(texts = [], speed = 80, pause = 2000) {
 }
 
 export default function Hero() {
-  const { banner, bio, resume } = useData();
+  const { data } = useFetch(getProjectStats);
+
+  const { banner, bio, resume, loading } = useData();
   const { theme } = useTheme();
   const videoRef = useRef(null);
   const sectionRef = useRef(null);
@@ -70,7 +74,7 @@ export default function Hero() {
   const ctaButtons = banner?.ctaButtons?.length
     ? banner.ctaButtons
     : [
-        { label: "View Projects", url: "/projects", variant: "primary" },
+        { label: "View Projects", url: "/archives", variant: "primary" },
         { label: "About Me", url: "/about", variant: "outline" },
       ];
 
@@ -81,6 +85,7 @@ export default function Hero() {
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
+  // console.log(data, bio, resume, loading);
 
   return (
     <div className="bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
@@ -218,7 +223,7 @@ export default function Hero() {
         >
           {[
             { num: bio?.experience?.length || "3+", label: "Years Exp." },
-            { num: "20+", label: "Projects" },
+            { num: data ? data : "20+", label: "Projects" },
             { num: bio?.skills?.length || "15+", label: "Technologies" },
           ].map(({ num, label }) => (
             <div key={label}>

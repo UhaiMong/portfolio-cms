@@ -112,7 +112,7 @@ export interface Banner {
   name: string;
   typingTexts: string[];
   description: string;
-  image: string;
+  bannerURL: string;
   ctaButtons: CTAButton[];
   isActive: boolean;
   createdAt: string;

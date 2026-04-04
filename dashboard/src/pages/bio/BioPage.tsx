@@ -19,7 +19,6 @@ import {
   fetchBio,
   updateBio,
 } from "../../src/features/bio/bioSlice";
-import api from "../../src/services/api";
 import LoadingOverlay from "../../src/components/ui/LoadingOverlay";
 import MediaPickerModal from "../media/Mediapickermodal";
 
@@ -233,13 +232,6 @@ export default function BioPage() {
                     </div>
                   )}
                 </div>
-                {/* <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={onAvatarChange}
-                /> */}
               </div>
               {/* Name */}
               <div className="flex-1">
@@ -695,7 +687,7 @@ export default function BioPage() {
           </div>
         )}
       </div>
-      {/* Thumbnail picker — single select */}
+      {/* single select */}
       <MediaPickerModal
         open={pickerMode === "avatar"}
         onClose={closePicker}

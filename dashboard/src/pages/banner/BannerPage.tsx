@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Plus,
@@ -20,6 +20,7 @@ import {
   updateBanner,
 } from "../../src/features/banner/bannerSlice";
 import LoadingOverlay from "../../src/components/ui/LoadingOverlay";
+import MediaPickerModal from "../media/Mediapickermodal";
 
 const inputCls =
   "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-indigo-500 transition-colors";
@@ -28,7 +29,7 @@ const labelCls = "block text-xs font-medium text-gray-400 mb-1.5";
 const emptyForm = {
   greeting: "Hi, I'm",
   name: "",
-  typingTexts: [""],
+  bannerURL: "",
   description: "",
 };
 
@@ -40,9 +41,7 @@ export default function BannerPage() {
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [acting, setActing] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePrev, setImagePrev] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const [form, setForm] = useState(emptyForm);
   const [typingTexts, setTypingTexts] = useState<string[]>([""]);
@@ -57,8 +56,6 @@ export default function BannerPage() {
     setForm(emptyForm);
     setTypingTexts([""]);
     setCtaButtons([]);
-    setImageFile(null);
-    setImagePrev("");
     setShowForm(true);
   };
 
@@ -67,13 +64,11 @@ export default function BannerPage() {
     setForm({
       greeting: b.greeting,
       name: b.name,
-      typingTexts: b.typingTexts,
+      bannerURL: b.bannerURL,
       description: b.description,
     });
-    setTypingTexts(b.typingTexts.length ? b.typingTexts : [""]);
+    setTypingTexts(b.typingTexts?.length ? b.typingTexts : [""]);
     setCtaButtons(b.ctaButtons || []);
-    setImageFile(null);
-    setImagePrev(b.image || "");
     setShowForm(true);
   };
 
@@ -84,20 +79,18 @@ export default function BannerPage() {
     }
     setSaving(true);
 
-    const fd = new FormData();
-    fd.append("greeting", form.greeting);
-    fd.append("name", form.name);
-    fd.append("description", form.description);
-    fd.append(
-      "typingTexts",
-      JSON.stringify(typingTexts.filter((t) => t.trim())),
-    );
-    fd.append("ctaButtons", JSON.stringify(ctaButtons));
-    if (imageFile) fd.append("image", imageFile);
+    const payload: Partial<Banner> = {
+      greeting: form.greeting,
+      name: form.name,
+      bannerURL: form.bannerURL,
+      description: form.description,
+      typingTexts: typingTexts.filter((t) => t.trim()),
+      ctaButtons,
+    };
 
     const res = editing
-      ? await dispatch(updateBanner({ id: editing._id, data: fd }))
-      : await dispatch(createBanner(fd));
+      ? await dispatch(updateBanner({ id: editing._id, data: payload }))
+      : await dispatch(createBanner(payload));
 
     if (
       createBanner.fulfilled.match(res) ||
@@ -105,7 +98,9 @@ export default function BannerPage() {
     ) {
       toast.success(editing ? "Banner updated!" : "Banner created!");
       setShowForm(false);
-    } else toast.error("Failed to save banner");
+    } else {
+      toast.error((res.payload as string) || "Failed to save banner");
+    }
     setSaving(false);
   };
 
@@ -124,7 +119,9 @@ export default function BannerPage() {
     if (deleteBanner.fulfilled.match(res)) {
       toast.success("Deleted");
       if (editing?._id === id) setShowForm(false);
-    } else toast.error("Failed to delete");
+    } else {
+      toast.error("Failed to delete");
+    }
     setActing(null);
   };
 
@@ -143,11 +140,9 @@ export default function BannerPage() {
       p.map((b, idx) => (idx === i ? { ...b, [key]: val } : b)),
     );
 
-  const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    setImageFile(f);
-    setImagePrev(URL.createObjectURL(f));
+  const handleMediaSelect = (url: string) => {
+    setForm((p) => ({ ...p, bannerURL: url }));
+    setPickerOpen(false);
   };
 
   return (
@@ -183,16 +178,16 @@ export default function BannerPage() {
               <div
                 key={b._id}
                 className={`bg-gray-900 border rounded-xl overflow-hidden transition-all
-                ${b.isActive ? "border-indigo-500/50" : "border-gray-800"}
-                ${editing?._id === b._id ? "ring-2 ring-indigo-500" : ""}`}
+                  ${b.isActive ? "border-indigo-500/50" : "border-gray-800"}
+                  ${editing?._id === b._id ? "ring-2 ring-indigo-500" : ""}`}
               >
-                {/* Banner image preview */}
                 <div className="h-28 bg-gray-800 relative overflow-hidden">
-                  {b.image ? (
+                  {b.bannerURL ? (
                     <img
-                      src={b.image}
+                      src={b.bannerURL}
                       alt={b.name}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-600 text-sm">
@@ -210,7 +205,7 @@ export default function BannerPage() {
                   <p className="text-xs text-gray-500">{b.greeting}</p>
                   <h3 className="font-semibold text-white mt-0.5">{b.name}</h3>
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {b.typingTexts.slice(0, 3).map((t, i) => (
+                    {b.typingTexts?.slice(0, 3).map((t, i) => (
                       <span
                         key={i}
                         className="text-xs bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full"
@@ -261,7 +256,6 @@ export default function BannerPage() {
         {/* Form panel */}
         {showForm && (
           <div className="flex-1 bg-gray-900 border border-gray-800 rounded-xl flex flex-col overflow-hidden">
-            {/* Form header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800 shrink-0">
               <h2 className="font-semibold text-white">
                 {editing ? "Edit Banner" : "New Banner"}
@@ -275,33 +269,33 @@ export default function BannerPage() {
             </div>
 
             <div className="flex-1 overflow-y-auto px-5 py-5 space-y-5">
-              {/* Image upload */}
+              {/* Image picker */}
               <div>
                 <label className={labelCls}>Hero Image</label>
                 <div
-                  onClick={() => fileRef.current?.click()}
+                  onClick={() => setPickerOpen(true)}
                   className="relative border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-xl cursor-pointer transition-colors h-36 overflow-hidden"
                 >
-                  {imagePrev ? (
+                  {form.bannerURL ? (
                     <img
-                      src={imagePrev}
+                      src={form.bannerURL}
                       alt="preview"
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-500">
                       <Upload size={22} />
-                      <span className="text-sm">Upload hero image</span>
+                      <span className="text-sm">Click to pick image</span>
+                    </div>
+                  )}
+                  {form.bannerURL && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white text-xs font-medium flex items-center gap-1.5">
+                        <Upload size={14} /> Change image
+                      </span>
                     </div>
                   )}
                 </div>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={onImageChange}
-                />
               </div>
 
               {/* Greeting & Name */}
@@ -324,7 +318,7 @@ export default function BannerPage() {
                     onChange={(e) =>
                       setForm((p) => ({ ...p, name: e.target.value }))
                     }
-                    placeholder="John Doe"
+                    placeholder="Uhai Mong"
                     className={inputCls}
                   />
                 </div>
@@ -363,7 +357,7 @@ export default function BannerPage() {
                       <input
                         value={t}
                         onChange={(e) => updateTypingText(i, e.target.value)}
-                        placeholder={`e.g. Full Stack Developer`}
+                        placeholder="e.g. Full Stack Developer"
                         className={inputCls + " flex-1"}
                       />
                       {typingTexts.length > 1 && (
@@ -471,6 +465,13 @@ export default function BannerPage() {
           </div>
         )}
       </div>
+
+      <MediaPickerModal
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        allowedTypes={["image", "video"]}
+        onSelect={handleMediaSelect}
+      />
     </div>
   );
 }

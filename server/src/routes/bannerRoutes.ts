@@ -18,8 +18,8 @@ router.get("/", getBanner);
 // Protected
 router.use(protect);
 router.get("/all", getAllBanners);
-router.post("/", uploadImage.single("image"), createBanner);
-router.patch("/:id", uploadImage.single("image"), updateBanner);
+router.post("/", createBanner);
+router.patch("/:id", updateBanner);
 router.patch("/:id/activate", activateBanner);
 router.delete("/:id", deleteBanner);
 

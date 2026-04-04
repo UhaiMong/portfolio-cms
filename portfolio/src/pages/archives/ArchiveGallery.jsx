@@ -7,6 +7,7 @@ import SkeletonGrid from "./components/SkeletonGrid";
 import GridCard from "./components/GridCard";
 import ListCard from "./components/ListCard";
 import useFetch from "../../hooks/useFetch";
+import Breadcrumbs from "../../components/ui/BreadCrumbs";
 
 // Stagger container
 const containerVariants = {
@@ -47,6 +48,7 @@ export default function ArchiveGallery() {
   return (
     <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-20 px-4">
       <div className="max-w-7xl mx-auto">
+        <Breadcrumbs />
         {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -70,7 +72,7 @@ export default function ArchiveGallery() {
           </p>
         </motion.div>
 
-        {/* ── Toolbar ── */}
+        {/* Toolbar */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

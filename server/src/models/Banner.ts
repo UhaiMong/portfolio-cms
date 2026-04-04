@@ -9,9 +9,9 @@ interface ICTAButton {
 export interface IBanner extends Document {
   greeting: string;
   name: string;
-  typingTexts: string[]; // animated rotating texts e.g. ["Full Stack Dev", "UI/UX Designer"]
+  typingTexts: string[];
   description: string;
-  image: string;
+  bannerURL: string;
   ctaButtons: ICTAButton[];
   isActive: boolean;
   createdAt: Date;
@@ -37,7 +37,7 @@ const BannerSchema = new Schema<IBanner>(
     name: { type: String, required: [true, "Name is required"] },
     typingTexts: [{ type: String }],
     description: { type: String, default: "" },
-    image: { type: String, default: "" },
+    bannerURL: { type: String, default: "" },
     ctaButtons: [CTAButtonSchema],
     isActive: { type: Boolean, default: true },
   },

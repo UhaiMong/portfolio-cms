@@ -10,11 +10,13 @@ import {
   getProjectDetails,
 } from "../controllers/projectController";
 import { protect } from "../middleware/auth";
+import { getProjectStats } from "../controllers/projectStats.controller";
 
 const router = Router();
 
 // Public
 router.get("/", getAllProjects);
+router.get("/stats", getProjectStats);
 router.get("/:slug", getProjectBySlug);
 router.get("/archive/:slug", getProjectDetails);
 

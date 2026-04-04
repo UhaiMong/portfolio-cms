@@ -38,7 +38,14 @@ export const DataProvider = ({ children }) => {
   }, []);
   return (
     <DataContext.Provider
-      value={{ bio, banner, resume, loading, error, refetch: loadGlobalData }}
+      value={{
+        bio,
+        banner,
+        resume,
+        loading,
+        error,
+        refetch: loadGlobalData,
+      }}
     >
       {children}
     </DataContext.Provider>
