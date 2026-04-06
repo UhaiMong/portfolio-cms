@@ -16,16 +16,18 @@ export default function Breadcrumbs() {
 
   return (
     <nav className="flex items-center space-x-2 text-sm text-gray-600">
-      <Link to="/" className="hover:text-blue-600">
+      <Link to="/" className="hover:text-green-600">
         Home
       </Link>
       {breadcrumbs.map((crumb, index) => (
         <span key={crumb.path} className="flex items-center space-x-2">
           <span>/</span>
           {index === breadcrumbs.length - 1 ? (
-            <span className="text-gray-900 font-medium">{crumb.label}</span>
+            <span className="text-gray-900 dark:text-gray-500 font-extrabold underline">
+              {crumb.label}
+            </span>
           ) : (
-            <Link to={crumb.path} className="hover:text-blue-600">
+            <Link to={crumb.path} className="hover:text-green-600">
               {crumb.label}
             </Link>
           )}

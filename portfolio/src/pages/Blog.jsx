@@ -46,7 +46,7 @@ export default function Blog() {
   });
 
   return (
-    <div className="w-full h-full overflow-y-scroll bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <div className="w-full bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
       <div className="min-h-screen">
         {/*  Hero banner  */}
         <section className="relative pt-32 pb-20 px-4 md:px-6 overflow-hidden">

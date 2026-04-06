@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "preact/hooks";
 import { FiChevronUp } from "react-icons/fi";
 
 // Scroll-to-top button

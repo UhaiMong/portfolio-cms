@@ -8,6 +8,7 @@ import GridCard from "./components/GridCard";
 import ListCard from "./components/ListCard";
 import useFetch from "../../hooks/useFetch";
 import Breadcrumbs from "../../components/ui/BreadCrumbs";
+import ErrorState from "../../components/ui/ErrorState";
 
 // Stagger container
 const containerVariants = {
@@ -144,12 +145,7 @@ export default function ArchiveGallery() {
         {loading ? (
           <SkeletonGrid />
         ) : error ? (
-          <div className="text-center py-24">
-            <p className="text-red-500 mb-4">{error}</p>
-            <button className="px-6 py-2.5 rounded-xl bg-violet-500 text-white text-sm font-semibold hover:bg-violet-600 transition-colors">
-              Retry
-            </button>
-          </div>
+          <ErrorState message={error} onRetry={refetch} />
         ) : projects.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
@@ -199,7 +195,7 @@ export default function ArchiveGallery() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 disabled:opacity-40 hover:border-violet-400/60 transition-colors"
+              className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 disabled:opacity-40 hover:border-green-400/60 transition-colors"
             >
               ← Prev
             </button>
@@ -231,8 +227,8 @@ export default function ArchiveGallery() {
                       onClick={() => setPage(p)}
                       className={`w-9 h-9 rounded-xl text-sm font-semibold border transition-all ${
                         page === p
-                          ? "bg-violet-500 text-white border-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.4)]"
-                          : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-violet-400/60"
+                          ? "bg-green-500 text-white border-green-500 shadow-[0_0_12px_rgba(139,92,246,0.4)]"
+                          : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-green-400/60"
                       }`}
                     >
                       {p}
@@ -244,7 +240,7 @@ export default function ArchiveGallery() {
             <button
               onClick={() => setPage((p) => Math.min(pagination.pages, p + 1))}
               disabled={page === pagination.pages}
-              className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 disabled:opacity-40 hover:border-violet-400/60 transition-colors"
+              className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 disabled:opacity-40 hover:border-green-400/60 transition-colors"
             >
               Next →
             </button>

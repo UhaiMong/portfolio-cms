@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight, FiGithub, FiExternalLink } from "react-icons/fi";
 import { getProjects } from "../../services/portfolioService";
-// import { getProjects } from "../services/portfolioService";
 
 const CATEGORIES = ["All", "Web", "Mobile", "Fullstack", "UI/UX"];
 

@@ -18,15 +18,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
-      // Chat gpt
       { path: "archives", element: <ArchiveGallery /> },
       { path: "archives/:slug", element: <ArrchiveDetails /> },
-      // Gemini
-      { path: "archives/gemini", element: <ProjectGalleryGemini /> },
-      {
-        path: "archives/gemini/:slug",
-        element: <ProjectGalleryDetailsGemini />,
-      },
       { path: "blog", element: <Blog /> },
       { path: "contact", element: <Contact /> },
       { path: "blog/:slug", element: <BlogDetails /> },

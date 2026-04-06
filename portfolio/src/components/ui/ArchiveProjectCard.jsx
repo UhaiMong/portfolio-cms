@@ -21,7 +21,7 @@ export default function ArchiveProjectCard({ project }) {
           />
 
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center">
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center">
             <span className="text-white text-sm tracking-wide">
               View Project →
             </span>
