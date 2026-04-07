@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { getBlogBySlug, getBlogs } from "../../../services/portfolioService";
 import useFetch from "../../../hooks/useFetch";
 import ErrorState from "../../../components/ui/ErrorState";
@@ -16,11 +16,11 @@ import {
 } from "react-icons/fi";
 import { FaStar } from "react-icons/fa6";
 import RichTextContent from "../../../components/ui/RichTextContent";
-import ScrollTop from "./ScrollTop";
 import ReadingProgress from "./ReadingProgress";
 import TableOfContents from "./TableOfContents";
 import DetailSkeleton from "./DetailSkeleton";
 import RelatedCard from "./RelatedCard";
+import Breadcrumbs from "../../../components/ui/BreadCrumbs";
 
 //  Main component
 export default function BlogDetails() {
@@ -98,13 +98,12 @@ export default function BlogDetails() {
   };
 
   return (
-    <div className="w-full h-full overflow-y-scroll bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <div className="w-full bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
       <div className="min-h-screen">
         <ReadingProgress />
-        <ScrollTop />
-
         {/* Back nav */}
-        <div className="max-w-6xl mx-auto px-4 md:px-6 pt-28 pb-4">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 pt-28 pb-4 space-y-5">
+          <Breadcrumbs />
           <button
             onClick={() => navigate(-1)}
             className="group flex items-center gap-2 text-xs tracking-widest uppercase transition-colors duration-300"
