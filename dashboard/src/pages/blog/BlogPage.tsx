@@ -158,6 +158,7 @@ export default function BlogPage() {
                     <div className="flex items-center gap-3">
                       {b.thumbnail ? (
                         <img
+                          loading="lazy"
                           src={b.thumbnail}
                           alt={b.title}
                           className="w-10 h-10 rounded-lg object-cover shrink-0"

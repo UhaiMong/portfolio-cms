@@ -122,6 +122,7 @@ export default function ProjectGalleryGemini() {
                   {/* Thumbnail */}
                   <div className="relative h-56 overflow-hidden">
                     <img
+                      loading="lazy"
                       src={project.thumbnail}
                       alt={project.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

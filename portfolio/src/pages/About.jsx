@@ -89,6 +89,7 @@ export default function About({ standalone = true }) {
                   >
                     {bio.avatar ? (
                       <img
+                        loading="lazy"
                         src={bio.avatar}
                         alt={bio.name}
                         className="w-full h-full object-cover object-top

@@ -2,13 +2,22 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { BsArrowRight } from "react-icons/bs";
 import { FaStar } from "react-icons/fa6";
-import { Link } from "react-router-dom";
-function ProjectListItem({ project, index, isActive, onClick }) {
+function ProjectListItem({
+  project,
+  index,
+  isActive,
+  onHover,
+  onLeave,
+  onClick,
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.06 }}
+      onMouseEnter={() => onHover(project)}
+      onMouseLeave={onLeave}
+      onClick={() => onClick(project)}
       className={`group relative flex items-center gap-4 p-4 rounded-xl cursor-pointer
         border transition-all duration-300
         ${
@@ -21,10 +30,7 @@ function ProjectListItem({ project, index, isActive, onClick }) {
       <span className="text-xs font-mono  w-6 shrink-0">
         {String(index + 1).padStart(2, "0")}
       </span>
-      <div
-        className="flex flex-col md:flex-row items-start md:items-center gap-x-2.5"
-        onClick={() => onClick(project?.liveUrl)}
-      >
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-x-2.5">
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
@@ -36,19 +42,6 @@ function ProjectListItem({ project, index, isActive, onClick }) {
               group-hover:text-amber-400 transition-colors duration-500 shrink-0"
               />
             )}
-            {/* status */}
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-all duration-500 font-bold italic
-        ${
-          project.status === "completed"
-            ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
-            : project.status === "in-progress"
-              ? " bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
-              : ""
-        }`}
-            >
-              [{project.status}]
-            </span>
           </div>
           <p className="text-xs mt-0.5">{project.category}</p>
           {/* Tech stack pills */}
@@ -67,15 +60,29 @@ function ProjectListItem({ project, index, isActive, onClick }) {
         </div>
       </div>
 
-      {/* Details view */}
-      <div className="flex-1 text-right flex justify-end items-center">
-        <button
-          onClick={() => onClick(project)}
-          className={`flex justify-end shrink-0 gap-x-2 items-center text-xs cursor-pointer font-bold rounded-md bg-green-400 text-gray-950 transition-all duration-500 py-2 px-2.5`}
+      {/* Status */}
+      <div className="text-right flex-1 flex justify-end shrink-0 gap-x-2 items-center">
+        <span
+          className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-all duration-500 text-right
+        ${
+          project.status === "completed"
+            ? " group-hover:bg-green-100 group-hover:text-green-600 dark:group-hover:bg-green-900/30 dark:group-hover:text-green-400"
+            : project.status === "in-progress"
+              ? " group-hover:bg-yellow-100 group-hover:text-yellow-600 dark:group-hover:bg-yellow-900/30 dark:group-hover:text-yellow-400"
+              : ""
+        }`}
         >
-          View Details
+          {project.status}
+        </span>
+
+        {/* Arrow */}
+        <span
+          className="
+        group-hover:text-black dark:group-hover:text-white
+        group-hover:translate-x-1 transition-all duration-300 shrink-0"
+        >
           <BsArrowRight />
-        </button>
+        </span>
       </div>
     </motion.div>
   );

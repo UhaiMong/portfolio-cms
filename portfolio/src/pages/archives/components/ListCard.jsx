@@ -16,6 +16,7 @@ function ListCard({ project, index }) {
       <div className="relative shrink-0 w-28 h-20 sm:w-36 sm:h-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
         {project.thumbnail ? (
           <img
+            loading="lazy"
             src={project.thumbnail}
             alt={project.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -59,14 +60,13 @@ function ListCard({ project, index }) {
         </span>
         <div className="flex flex-col items-end gap-2">
           {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-green-500 transition-colors"
+            <Link
+              to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+              className="flex items-center gap-2 text-xs tracking-widest uppercase px-4 py-2.5
+              text-gray-400 hover:text-green-500 transition-colors duration-300"
             >
-              <FiExternalLink size={14} />
-            </a>
+              <FiExternalLink size={12} /> Live Preview
+            </Link>
           )}
           {project.githubUrl && (
             <a

@@ -221,6 +221,7 @@ export default function BioPage() {
                 >
                   {bio?.avatar ? (
                     <img
+                      loading="lazy"
                       src={newAvatar ? newAvatar : bio.avatar}
                       alt={bio?.name}
                       className="w-full h-full object-cover"

@@ -222,6 +222,7 @@ export default function MediaPage() {
                   <div className="h-28 bg-gray-800 flex items-center justify-center overflow-hidden">
                     {m.fileType === "image" ? (
                       <img
+                        loading="lazy"
                         src={m.fileUrl}
                         alt={m.originalName}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
@@ -294,6 +295,7 @@ export default function MediaPage() {
             <div className="rounded-lg overflow-hidden bg-gray-800 h-36 flex items-center justify-center">
               {selected.fileType === "image" ? (
                 <img
+                  loading="lazy"
                   src={selected.fileUrl}
                   alt={selected.originalName}
                   className="w-full h-full object-contain"

@@ -160,6 +160,7 @@ export default function BlogModal({ onClose }: Props) {
                 >
                   {thumbPrev ? (
                     <img
+                      loading="lazy"
                       src={thumbPrev}
                       alt="preview"
                       className="w-full h-full object-cover"

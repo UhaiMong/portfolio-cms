@@ -6,27 +6,20 @@ import { getProjects } from "../services/portfolioService";
 import SectionHeading from "../components/ui/SectionHeading";
 import ErrorState from "../components/ui/ErrorState";
 import ProjectDetail from "./projects/ProjectDetail";
+import ProjectPreview from "./projects/LaptopPreview";
 import ProjectListItem from "./projects/ProjectListItem";
 import CategoryFilter from "./projects/CategoryFilter";
-import SitePreview from "../components/ui/SitePreview";
+import { Link } from "react-router-dom";
 
 // Main page
 export default function ProjectsPage({ standalone = true }) {
   const { data, loading, error, refetch } = useFetch(getProjects, {}, []);
 
+  const [hovered, setHovered] = useState(null);
   const [selected, setSelected] = useState(null);
-  const [URL, setURL] = useState(null);
-  const [activeCategory, setActiveCategory] = useState("All");
 
   const projects = data?.projects || [];
-  const categories = [
-    ...new Set(projects.map((p) => p.category).filter(Boolean)),
-  ];
-
-  const filtered =
-    activeCategory === "All"
-      ? projects
-      : projects.filter((p) => p.category === activeCategory);
+  const filtered = projects.filter((p) => p.featured === true);
 
   return (
     <div className="w-full h-auto bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
@@ -64,6 +57,8 @@ export default function ProjectsPage({ standalone = true }) {
           </motion.div>
         )}
 
+        {error && <ErrorState message={error} onRetry={refetch} />}
+
         {!error && (
           <div
             className="grid grid-cols-12 gap-6"
@@ -76,14 +71,17 @@ export default function ProjectsPage({ standalone = true }) {
               border border-black/5 dark:border-white/5
               rounded-2xl p-4 h-full flex flex-col"
               >
-                {/* Category filter */}
-                {categories.length > 0 && !selected && (
-                  <CategoryFilter
-                    categories={categories}
-                    active={activeCategory}
-                    onChange={setActiveCategory}
-                  />
-                )}
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl md:text-4xl font-semibold">
+                    Featured Projects:
+                  </h2>
+                  <Link
+                    className="underline font-semibold text-xl md:text-2xl"
+                    to={"/archives"}
+                  >
+                    View All
+                  </Link>
+                </div>
 
                 <div className="flex-1 overflow-hidden">
                   <AnimatePresence mode="wait">
@@ -128,8 +126,10 @@ export default function ProjectsPage({ standalone = true }) {
                               key={p._id}
                               project={p}
                               index={i}
-                              isActive={URL === p.liveUrl}
-                              onClick={setSelected || setURL}
+                              isActive={hovered?._id === p._id}
+                              onHover={setHovered}
+                              onLeave={() => setHovered(null)}
+                              onClick={setSelected}
                             />
                           ))
                         )}
@@ -139,7 +139,6 @@ export default function ProjectsPage({ standalone = true }) {
                 </div>
               </div>
             </div>
-            {error && <ErrorState message={error} onRetry={refetch} />}
 
             {/* RIGHT: Preview */}
             <div className="md:col-span-6 col-span-12">
@@ -149,9 +148,13 @@ export default function ProjectsPage({ standalone = true }) {
               rounded-2xl p-8 h-full flex items-center justify-center"
               >
                 <AnimatePresence mode="wait">
-                  <SitePreview
-                    key={selected?._id || "empty"}
-                    project={selected || (projects.length ? projects[0] : null)}
+                  <ProjectPreview
+                    key={hovered?._id || selected?._id || "empty"}
+                    project={
+                      hovered ||
+                      selected ||
+                      (projects.length ? projects[0] : null)
+                    }
                   />
                 </AnimatePresence>
               </div>

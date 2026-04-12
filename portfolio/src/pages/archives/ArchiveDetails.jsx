@@ -116,6 +116,7 @@ export default function ProjectGalleryDetails() {
                     }
                   >
                     <img
+                      loading="lazy"
                       src={project?.thumbnail}
                       alt={project?.title}
                       className="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700"
@@ -143,14 +144,12 @@ export default function ProjectGalleryDetails() {
                 {/* CTA buttons */}
                 <div className="flex flex-wrap items-center gap-2">
                   {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold transition-colors shadow-[0_4px_16px_rgba(139,92,246,0.35)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.5)]"
                     >
-                      <FiExternalLink size={14} /> Live Demo
-                    </a>
+                      <FiExternalLink size={12} /> Live Preview
+                    </Link>
                   )}
                   {project.githubUrl && (
                     <a
@@ -225,6 +224,7 @@ export default function ProjectGalleryDetails() {
                           <div className="mb-4">
                             <div className="relative w-full pb-[56.25%]">
                               <iframe
+                                loading="lazy"
                                 className="absolute inset-0 w-full h-full rounded-md"
                                 src={`https://www.youtube.com/embed/${project.videoId}`}
                                 title={`${project.title} demo`}
@@ -250,6 +250,7 @@ export default function ProjectGalleryDetails() {
                               }
                             >
                               <img
+                                loading="lazy"
                                 src={img}
                                 alt={`${project.title} screenshot ${i + 1}`}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -349,14 +350,12 @@ export default function ProjectGalleryDetails() {
                         Links
                       </h3>
                       {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm text-green-500 hover:text-green-600 font-medium transition-colors"
+                        <Link
+                          to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+                          className="flex items-center gap-2 tracking-widest uppercase text-sm text-green-500 hover:text-green-600 font-medium transition-colors"
                         >
-                          <FiExternalLink size={13} /> Live Site
-                        </a>
+                          <FiExternalLink size={12} /> Live Preview
+                        </Link>
                       )}
                       {project.githubUrl && (
                         <a
@@ -389,6 +388,7 @@ export default function ProjectGalleryDetails() {
           >
             <div className="w-30">
               <img
+                loading="lazy"
                 className="w-full h-30 rounded-md object-cover"
                 src={prev?.thumbnail}
                 alt=""
@@ -407,6 +407,7 @@ export default function ProjectGalleryDetails() {
           >
             <div className="w-30">
               <img
+                loading="lazy"
                 className="w-full h-30 rounded-md object-cover"
                 src={next?.thumbnail}
                 alt=""

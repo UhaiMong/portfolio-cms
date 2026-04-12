@@ -14,6 +14,7 @@ export default function ArchiveProjectCard({ project }) {
         {/* Image */}
         <div className="relative overflow-hidden">
           <img
+            loading="lazy"
             src={project.thumbnail}
             alt={project.title}
             loading="lazy"
