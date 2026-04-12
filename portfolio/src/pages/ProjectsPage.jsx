@@ -6,16 +6,16 @@ import { getProjects } from "../services/portfolioService";
 import SectionHeading from "../components/ui/SectionHeading";
 import ErrorState from "../components/ui/ErrorState";
 import ProjectDetail from "./projects/ProjectDetail";
-import ProjectPreview from "./projects/LaptopPreview";
 import ProjectListItem from "./projects/ProjectListItem";
 import CategoryFilter from "./projects/CategoryFilter";
+import SitePreview from "../components/ui/SitePreview";
 
 // Main page
 export default function ProjectsPage({ standalone = true }) {
   const { data, loading, error, refetch } = useFetch(getProjects, {}, []);
 
-  const [hovered, setHovered] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [URL, setURL] = useState(null);
   const [activeCategory, setActiveCategory] = useState("All");
 
   const projects = data?.projects || [];
@@ -63,8 +63,6 @@ export default function ProjectsPage({ standalone = true }) {
             </a>
           </motion.div>
         )}
-
-        {error && <ErrorState message={error} onRetry={refetch} />}
 
         {!error && (
           <div
@@ -130,10 +128,8 @@ export default function ProjectsPage({ standalone = true }) {
                               key={p._id}
                               project={p}
                               index={i}
-                              isActive={hovered?._id === p._id}
-                              onHover={setHovered}
-                              onLeave={() => setHovered(null)}
-                              onClick={setSelected}
+                              isActive={URL === p.liveUrl}
+                              onClick={setSelected || setURL}
                             />
                           ))
                         )}
@@ -143,6 +139,7 @@ export default function ProjectsPage({ standalone = true }) {
                 </div>
               </div>
             </div>
+            {error && <ErrorState message={error} onRetry={refetch} />}
 
             {/* RIGHT: Preview */}
             <div className="md:col-span-6 col-span-12">
@@ -152,13 +149,9 @@ export default function ProjectsPage({ standalone = true }) {
               rounded-2xl p-8 h-full flex items-center justify-center"
               >
                 <AnimatePresence mode="wait">
-                  <ProjectPreview
-                    key={hovered?._id || selected?._id || "empty"}
-                    project={
-                      hovered ||
-                      selected ||
-                      (projects.length ? projects[0] : null)
-                    }
+                  <SitePreview
+                    key={selected?._id || "empty"}
+                    project={selected || (projects.length ? projects[0] : null)}
                   />
                 </AnimatePresence>
               </div>

@@ -1,5 +1,6 @@
 // ── Laptop / Project preview
 import { motion } from "framer-motion";
+import SitePreview from "../../components/ui/SitePreview";
 
 function ProjectPreview({ project }) {
   if (!project)
@@ -14,6 +15,7 @@ function ProjectPreview({ project }) {
         <p className="text-xs tracking-widest uppercase">Hover a project</p>
       </div>
     );
+  console.log(project);
   return (
     <motion.div
       key={project._id}
@@ -31,13 +33,14 @@ function ProjectPreview({ project }) {
           <span className="w-3 h-3 rounded-full bg-green-500" />
         </div>
         <div className="absolute top-[5.7%] left-[10.2%] w-[80%] h-[73%] object-contain overflow-hidden rounded-md">
-          {project.thumbnail ? (
-            <img
-              src={project.thumbnail}
-              alt={project.title}
-              className="w-full h-full object-cover object-top
-                grayscale hover:grayscale-0 transition-all duration-700"
-            />
+          {project.liveUrl ? (
+            // <img
+            //   src={project.thumbnail}
+            //   alt={project.title}
+            //   className="w-full h-full object-cover object-top
+            //     grayscale hover:grayscale-0 transition-all duration-700"
+            // />
+            <SitePreview url={project?.liveUrl} />
           ) : (
             <div
               className="w-full h-full flex items-center justify-center

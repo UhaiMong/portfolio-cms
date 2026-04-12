@@ -11,6 +11,7 @@ import EmptyState from "./aboutme/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
 import useFetch from "../hooks/useFetch";
 import { getProjectStats } from "../services/portfolioService";
+import AboutSkeleton from "../components/ui/AboutSkeleton";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 //  Tabs
@@ -21,31 +22,6 @@ export default function About({ standalone = true }) {
   const { data } = useFetch(getProjectStats);
   const { bio, resume, loading, error, refetch } = useData();
   const [activeTab, setActiveTab] = useState("About");
-  console.log(bio);
-  // Skeleton
-  if (loading)
-    return (
-      <section
-        className={`px-4 md:px-6 bg-gray-200 dark:bg-gray-900 ${standalone ? "py-14" : "py-7"}`}
-      >
-        <div className="max-w-6xl mx-auto animate-pulse space-y-8">
-          <div className="h-8 bg-gray-300 dark:bg-gray-800 rounded w-48 mx-auto" />
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <div className="h-64 bg-gray-300 dark:bg-gray-800 rounded-2xl" />
-            </div>
-            <div className="space-y-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="h-3 bg-gray-300 dark:bg-gray-800 rounded"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
 
   return (
     <div className="w-full h-auto bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
@@ -85,8 +61,9 @@ export default function About({ standalone = true }) {
               Who I am
             </motion.p>
           )}
-          {error || (!bio && <ErrorState message={error} onRetry={refetch} />)}
-          {bio && (
+          {loading ? (
+            <AboutSkeleton />
+          ) : bio ? (
             <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-start justify-center">
               {/* LEFT: Avatar + stats */}
               <div className="md:col-span-4 flex flex-col items-center md:items-start gap-6">
@@ -291,6 +268,12 @@ export default function About({ standalone = true }) {
                   </motion.div>
                 </AnimatePresence>
               </div>
+            </div>
+          ) : error ? (
+            <ErrorState message={error} onRetry={refetch} />
+          ) : (
+            <div className="max-w-4xl m-auto text-center">
+              <h1 className="text-2xl md:text-4xl">No about data available</h1>
             </div>
           )}
         </div>

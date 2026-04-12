@@ -36,19 +36,6 @@ export default function ProjectGalleryDetails() {
 
   const contentRef = useRef(null);
 
-  console.log("project: ", project, "slug: ", slug);
-
-  // Keyboard nav
-  useEffect(() => {
-    const handler = (e) => {
-      if (lightbox) return;
-      if (e.key === "ArrowLeft" && prev) navigate(`/archives/${prev?.slug}`);
-      if (e.key === "ArrowRight" && next) navigate(`/archives/${next?.slug}`);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [lightbox]);
-
   // Gallery images (thumbnail + additionalImages)
   const galleryImages = project
     ? [project?.thumbnail, ...(project.images ?? [])].filter(Boolean)
