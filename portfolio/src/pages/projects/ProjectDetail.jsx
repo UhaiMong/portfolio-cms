@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa6";
 import { FiExternalLink, FiGithub, FiX, FiEye } from "react-icons/fi";
 import RichTextContent from "../../components/ui/RichTextContent";
+import { Link } from "react-router-dom";
 function ProjectDetail({ project, onClose }) {
   return (
     <motion.div
@@ -30,6 +31,7 @@ function ProjectDetail({ project, onClose }) {
       {project.thumbnail && (
         <div className="relative h-44 rounded-xl overflow-hidden mb-5 group">
           <img
+            loading="lazy"
             src={project.thumbnail}
             alt={project.title}
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
@@ -68,6 +70,7 @@ function ProjectDetail({ project, onClose }) {
         <div className="mb-4">
           <div className="relative w-full pb-[56.25%]">
             <iframe
+              loading="lazy"
               className="absolute inset-0 w-full h-full rounded-md"
               src={`https://www.youtube.com/embed/${project.videoId}`}
               title={`${project.title} demo`}
@@ -84,6 +87,7 @@ function ProjectDetail({ project, onClose }) {
         <div className="flex flex-col justify-start w-full mt-3">
           {project.images.map((img, i) => (
             <img
+              loading="lazy"
               className="w-full h-auto object-cover"
               key={i}
               src={img}
@@ -117,16 +121,14 @@ function ProjectDetail({ project, onClose }) {
       {/* Links */}
       <div className="flex gap-3 mt-auto pt-4 border-t border-black/5 dark:border-white/5">
         {project.liveUrl && (
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
             className="flex items-center gap-2 text-xs tracking-widest uppercase px-4 py-2.5
               hover:bg-black/80 dark:hover:bg-white/80
               transition-all duration-300"
           >
-            <FiExternalLink size={12} /> Live Demo
-          </a>
+            <FiExternalLink size={12} /> Live Preview
+          </Link>
         )}
         {project.githubUrl && (
           <a

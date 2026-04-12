@@ -31,21 +31,6 @@ function ProjectListItem({
         {String(index + 1).padStart(2, "0")}
       </span>
       <div className="flex flex-col md:flex-row items-start md:items-center gap-x-2.5">
-        {/* Thumbnail — grayscale → color */}
-        <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-black/5 dark:bg-white/5">
-          {project.thumbnail ? (
-            <img
-              src={project.thumbnail}
-              alt={project.title}
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center  text-xs">
-              No img
-            </div>
-          )}
-        </div>
-
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">

@@ -28,6 +28,7 @@ function BlogListItem({ blog, index }) {
         >
           {blog.thumbnail ? (
             <img
+              loading="lazy"
               src={blog.thumbnail}
               alt={blog.title}
               className="w-full h-full object-cover

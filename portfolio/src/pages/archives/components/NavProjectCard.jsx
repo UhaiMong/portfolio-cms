@@ -30,6 +30,7 @@ export default function NavProjectCard({ project, direction, onClick }) {
       {project.thumbnail && (
         <div className="shrink-0 w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
           <img
+            loading="lazy"
             src={project.thumbnail}
             alt={project.title}
             className="w-full h-full object-cover"

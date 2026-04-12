@@ -21,6 +21,7 @@ function GridCard({ project, index }) {
       <div className="relative overflow-hidden aspect-video bg-gray-100 dark:bg-gray-800">
         {project.thumbnail ? (
           <img
+            loading="lazy"
             src={project.thumbnail}
             alt={project.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -44,15 +45,12 @@ function GridCard({ project, index }) {
               className="absolute inset-0 bg-gray-950/70 backdrop-blur-[2px] flex items-center justify-center gap-3"
             >
               {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-full bg-white text-gray-900 hover:bg-violet-500 hover:text-white transition-colors"
+                <Link
+                  to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+                  className="flex items-center gap-2 text-xs tracking-widest uppercase px-4 py-2.5 bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors rounded-xl"
                 >
-                  <FiExternalLink size={13} /> Live
-                </a>
+                  <FiExternalLink size={12} /> Live Preview
+                </Link>
               )}
               {project.githubUrl && (
                 <a
@@ -60,7 +58,7 @@ function GridCard({ project, index }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors"
                 >
                   <FiGithub size={13} /> Code
                 </a>

@@ -204,6 +204,7 @@ export default function Resume({ resume, loading, error, onDownload }) {
         {/* PDF embed */}
         {!pdfError && !error ? (
           <iframe
+            loading="lazy"
             src={
               getPdfUrl(resume.fileUrl) + "#toolbar=0&navpanes=0&scrollbar=1"
             }

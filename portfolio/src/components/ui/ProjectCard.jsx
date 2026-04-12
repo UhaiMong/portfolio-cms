@@ -5,6 +5,7 @@ export default function ProjectCard({ project }) {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm hover:shadow-md transition border border-gray-200 dark:border-gray-700">
       <img
+        loading="lazy"
         src={project.image}
         alt={project.title}
         className="w-full h-56 object-cover rounded-t-xl"

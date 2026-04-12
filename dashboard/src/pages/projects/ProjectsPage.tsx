@@ -144,6 +144,7 @@ export default function ProjectsPage() {
               <div className="relative h-44 bg-gray-800 overflow-hidden">
                 {p.thumbnail ? (
                   <img
+                    loading="lazy"
                     src={p.thumbnail}
                     alt={p.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

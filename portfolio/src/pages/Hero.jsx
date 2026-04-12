@@ -85,7 +85,6 @@ export default function Hero() {
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
-  // console.log(data, bio, resume, loading);
 
   return (
     <div className="bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">

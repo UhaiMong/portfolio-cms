@@ -33,6 +33,7 @@ function ProjectPreview({ project }) {
         <div className="absolute top-[5.7%] left-[10.2%] w-[80%] h-[73%] object-contain overflow-hidden rounded-md">
           {project.thumbnail ? (
             <img
+              loading="lazy"
               src={project.thumbnail}
               alt={project.title}
               className="w-full h-full object-cover object-top
@@ -47,7 +48,12 @@ function ProjectPreview({ project }) {
             </div>
           )}
         </div>
-        <img src="/images/laptopScreen.svg" alt="Laptop" className="w-full" />
+        <img
+          loading="lazy"
+          src="/images/laptopScreen.svg"
+          alt="Laptop"
+          className="w-full"
+        />
       </div>
     </motion.div>
   );

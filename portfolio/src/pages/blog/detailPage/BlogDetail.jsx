@@ -252,6 +252,7 @@ export default function BlogDetails() {
                       <div className="flex items-center gap-2">
                         {blog.author.avatar ? (
                           <img
+                            loading="lazy"
                             src={blog.author.avatar}
                             alt={blog.author.name}
                             className="w-7 h-7 rounded-full object-cover grayscale"
@@ -322,6 +323,7 @@ export default function BlogDetails() {
                     aspect-16/7"
                   >
                     <img
+                      loading="lazy"
                       src={blog.thumbnail}
                       alt={blog.title}
                       className="w-full h-full object-cover"

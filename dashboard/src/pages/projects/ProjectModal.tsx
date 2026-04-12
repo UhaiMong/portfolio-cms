@@ -179,6 +179,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                   {thumbnail ? (
                     <>
                       <img
+                        loading="lazy"
                         src={thumbnail}
                         alt="Thumbnail preview"
                         className="w-full h-full object-cover"
@@ -219,6 +220,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                         className="relative group aspect-video rounded-lg overflow-hidden border border-gray-700"
                       >
                         <img
+                          loading="lazy"
                           src={img}
                           alt={`image-${idx}`}
                           className="w-full h-full object-cover"
