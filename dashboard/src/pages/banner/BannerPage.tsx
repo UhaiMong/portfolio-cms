@@ -184,7 +184,6 @@ export default function BannerPage() {
                 <div className="h-28 bg-gray-800 relative overflow-hidden">
                   {b.bannerURL ? (
                     <img
-                      loading="lazy"
                       src={b.bannerURL}
                       alt={b.name}
                       className="w-full h-full object-cover"

@@ -253,7 +253,6 @@ export default function MediaPickerModal(props: MediaPickerModalProps) {
                           <div className="aspect-square bg-white/5 flex items-center justify-center">
                             {isImage ? (
                               <img
-                                loading="lazy"
                                 src={item.fileUrl}
                                 alt={item.originalName}
                                 className="w-full h-full object-cover"

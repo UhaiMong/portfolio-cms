@@ -420,24 +420,18 @@ export default function ProjectModal({ project, onClose }: Props) {
                   <p className="text-sm font-medium text-gray-300 mb-2">
                     Featured
                   </p>
-                  <label className="flex items-center gap-2.5 cursor-pointer select-none w-fit">
-                    <input
-                      {...register("featured")}
-                      type="checkbox"
-                      className="sr-only peer"
-                      id="featured-toggle"
-                    />
-                    <div
-                      className="relative w-10 h-5 rounded-full transition-colors duration-200 bg-gray-700 peer-checked:bg-indigo-600"
-                      onClick={() => {
-                        const el = document.getElementById(
-                          "featured-toggle",
-                        ) as HTMLInputElement | null;
-                        if (el) el.click();
-                      }}
-                    />
-                    <span className="text-sm text-gray-400 peer-checked:text-gray-200 transition-colors">
-                      Featured
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <div className="relative">
+                      <input
+                        {...register("featured")}
+                        type="checkbox"
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-5 bg-gray-700 peer-checked:bg-indigo-600 rounded-full transition-colors" />
+                      <div className="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
+                    </div>
+                    <span className="text-sm text-gray-300">
+                      Mark as featured
                     </span>
                   </label>
                 </div>
