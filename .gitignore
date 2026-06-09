@@ -1,7 +1,12 @@
-node_modules/
+dist
+log
+logs
+node_modules
+.vscode
 .env
 .env.development
 .env.production
+.env.local
 *.log
 .DS_Store
 dist

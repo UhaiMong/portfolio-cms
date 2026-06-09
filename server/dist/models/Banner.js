@@ -48,7 +48,7 @@ const BannerSchema = new mongoose_1.Schema({
     name: { type: String, required: [true, "Name is required"] },
     typingTexts: [{ type: String }],
     description: { type: String, default: "" },
-    image: { type: String, default: "" },
+    bannerURL: { type: String, default: "" },
     ctaButtons: [CTAButtonSchema],
     isActive: { type: Boolean, default: true },
 }, { timestamps: true });

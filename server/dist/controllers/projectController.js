@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reorderProjects = exports.toggleFeatured = exports.deleteProject = exports.updateProject = exports.createProject = exports.getProjectBySlug = exports.getAllProjects = void 0;
+exports.reorderProjects = exports.toggleFeatured = exports.deleteProject = exports.updateProject = exports.createProject = exports.getProjectBySlug = exports.getProjectDetails = exports.getAllProjects = void 0;
 const models_1 = require("../models");
 const errorHandler_1 = require("../utils/errorHandler");
 const apiResponse_1 = require("../utils/apiResponse");
@@ -34,6 +34,27 @@ exports.getAllProjects = (0, errorHandler_1.catchAsync)(async (req, res) => {
         },
     });
 });
+// GET /archives/:slug
+const getProjectDetails = async (req, res) => {
+    const { slug } = req.params;
+    const project = await models_1.Project.findOne({ slug });
+    if (!project)
+        return (0, apiResponse_1.sendError)(res, 404, "Project not found");
+    const [prev, next] = await Promise.all([
+        models_1.Project.findOne({ order: { $lt: project.order } })
+            .sort({ order: -1 })
+            .select("title slug thumbnail"),
+        models_1.Project.findOne({ order: { $gt: project.order } })
+            .sort({ order: 1 })
+            .select("title slug thumbnail"),
+    ]);
+    (0, apiResponse_1.sendSuccess)(res, 200, "Project fetched", {
+        project,
+        prev,
+        next,
+    });
+};
+exports.getProjectDetails = getProjectDetails;
 // GET /api/projects/:slug
 exports.getProjectBySlug = (0, errorHandler_1.catchAsync)(async (req, res) => {
     const project = await models_1.Project.findOneAndUpdate({ slug: req.params.slug }, { $inc: { views: 1 } }, { returnDocument: "after" });
