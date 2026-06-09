@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IAdmin extends Document {
+  _id: mongoose.Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -39,9 +40,10 @@ const AdminSchema = new Schema<IAdmin>(
 );
 
 // Hash password before saving
-AdminSchema.pre("save", async function () {
+AdminSchema.pre("save", async function (this: IAdmin) {
   if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 12);
+  this.updatedAt = new Date();
 });
 
 // Compare password method

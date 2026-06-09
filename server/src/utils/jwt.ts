@@ -9,6 +9,7 @@ export interface JwtPayload {
   email: string;
   role: string;
 }
+// Use IAdmin from models/Admin
 
 export const generateToken = (admin: IAdmin): string => {
   return jwt.sign(

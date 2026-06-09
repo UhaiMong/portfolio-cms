@@ -26,12 +26,13 @@ const ResumeSchema = new Schema<IResume>(
 );
 
 // Only one resume can be active at a time
-ResumeSchema.pre("save", async function () {
+ResumeSchema.pre("save", async function (this: IResume) {
   if (this.isModified("isActive") && this.isActive) {
     await mongoose
       .model("Resume")
       .updateMany({ _id: { $ne: this._id } }, { isActive: false });
   }
+  this.updatedAt = new Date();
 });
 
 export default mongoose.model<IResume>("Resume", ResumeSchema);

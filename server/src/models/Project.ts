@@ -46,12 +46,13 @@ const ProjectSchema = new Schema<IProject>(
 );
 
 // Auto-generate slug from title
-ProjectSchema.pre("save", async function () {
+ProjectSchema.pre("save", async function (this: IProject) {
   if (!this.isModified("title")) return;
   this.slug = this.title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+  this.updatedAt = new Date();
 });
 
 // Index for faster queries

@@ -40,7 +40,7 @@ const BlogSchema = new Schema<IBlog>(
 );
 
 // Auto-generate slug & calculate read time
-BlogSchema.pre("save", async function () {
+BlogSchema.pre("save", async function (this: IBlog) {
   if (this.isModified("title")) {
     this.slug = this.title
       .toLowerCase()
@@ -58,6 +58,7 @@ BlogSchema.pre("save", async function () {
   ) {
     this.publishedAt = new Date();
   }
+  this.updatedAt = new Date();
 });
 
 BlogSchema.index({ slug: 1, status: 1, featured: 1, tags: 1 });
