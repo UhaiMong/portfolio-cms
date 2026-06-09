@@ -1,9 +1,9 @@
+import { genAI } from "../config/gimini";
 import { Bio, Blog, Project, Resume } from "../models";
 import { sendError, sendSuccess } from "../utils/apiResponse";
 import { buildSystemPrompt } from "../utils/buildPrompt";
 import { catchAsync } from "../utils/errorHandler";
 import type { Request, Response } from "express";
-import { genAI } from "../config/gimini";
 
 export const chat = catchAsync(async (req: Request, res: Response) => {
   try {
@@ -29,7 +29,7 @@ export const chat = catchAsync(async (req: Request, res: Response) => {
         parts: [{ text: m.content }],
       }));
 
-    const response = await genAI.models.generateContent({
+    const response = await genAI().models.generateContent({
       model: "gemini-2.5-flash",
       config: {
         systemInstruction: systemPrompt,

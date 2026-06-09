@@ -1,5 +1,5 @@
-import cors from "cors";
 import "dotenv/config";
+import cors from "cors";
 import express from "express";
 import type { Application, Request, Response } from "express";
 import helmet from "helmet";
@@ -16,7 +16,6 @@ import resumeRoutes from "./routes/resumeRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import mediaRoutes from "./routes/mediaRoutes";
 import chatbootRoutes from "./routes/chatbootRoutes";
-import type { from } from "node:stream/iter";
 
 const app: Application = express();
 
