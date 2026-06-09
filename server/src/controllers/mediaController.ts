@@ -1,34 +1,36 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Media } from "../models";
 import { catchAsync, AppError } from "../utils/errorHandler";
 import { sendSuccess } from "../utils/apiResponse";
 import { cloudinary } from "../config/cloudinary";
 
 // POST /api/media/upload
-export const uploadMedia = catchAsync(async (req: Request, res: Response) => {
-  if (!req.file) throw new AppError("No file uploaded", 400);
+export const uploadMedia = catchAsync(
+  async (req: Request & { file?: any }, res: Response) => {
+    if (!req.file) throw new AppError("No file uploaded", 400);
 
-  const file = req.file as any;
-  const isImage = file.mimetype.startsWith("image/");
+    const file = req.file as any;
+    const isImage = file.mimetype.startsWith("image/");
 
-  const media = await Media.create({
-    fileName: file.filename,
-    originalName: file.originalname,
-    fileUrl: file.path,
-    publicId: file.filename,
-    fileType: isImage
-      ? "image"
-      : file.mimetype === "application/pdf"
-        ? "pdf"
-        : "other",
-    mimeType: file.mimetype,
-    fileSize: Math.round(file.size / 1024),
-    folder: req.body.folder || "general",
-    usedIn: req.body.usedIn || "",
-  });
+    const media = await Media.create({
+      fileName: file.filename,
+      originalName: file.originalname,
+      fileUrl: file.path,
+      publicId: file.filename,
+      fileType: isImage
+        ? "image"
+        : file.mimetype === "application/pdf"
+          ? "pdf"
+          : "other",
+      mimeType: file.mimetype,
+      fileSize: Math.round(file.size / 1024),
+      folder: req.body.folder || "general",
+      usedIn: req.body.usedIn || "",
+    });
 
-  sendSuccess(res, 201, "File uploaded", media);
-});
+    sendSuccess(res, 201, "File uploaded", media);
+  },
+);
 
 // GET /api/media
 export const getAllMedia = catchAsync(async (req: Request, res: Response) => {

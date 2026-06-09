@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { IAdmin } from "../models/Admin";
+import type { IAdmin } from "../models/Admin";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 const JWT_EXPIRES = process.env.JWT_EXPIRES_IN || "7d";

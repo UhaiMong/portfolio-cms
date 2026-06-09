@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Project, Blog, Contact, Media, Resume } from "../models";
 import { catchAsync } from "../utils/errorHandler";
 import { sendSuccess } from "../utils/apiResponse";

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Project } from "../models";
 import { catchAsync, AppError } from "../utils/errorHandler";
 import { sendError, sendSuccess } from "../utils/apiResponse";
@@ -41,7 +41,7 @@ export const getAllProjects = catchAsync(
 export const getProjectDetails = async (req: Request, res: Response) => {
   const { slug } = req.params;
 
-  const project = await Project.findOne({ slug });
+  const project = await Project.findOne({ slug: slug } as any);
 
   if (!project) return sendError(res, 404, "Project not found");
 
@@ -66,7 +66,7 @@ export const getProjectDetails = async (req: Request, res: Response) => {
 export const getProjectBySlug = catchAsync(
   async (req: Request, res: Response) => {
     const project = await Project.findOneAndUpdate(
-      { slug: req.params.slug },
+      { slug: req.params.slug } as any,
       { $inc: { views: 1 } },
       { returnDocument: "after" },
     );

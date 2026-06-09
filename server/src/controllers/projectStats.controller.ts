@@ -1,6 +1,6 @@
 import { Project } from "../models";
 import { sendSuccess } from "../utils/apiResponse";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { AppError, catchAsync } from "../utils/errorHandler";
 
 export const getProjectStats = catchAsync(

@@ -3,7 +3,7 @@ import { Bio, Blog, Project, Resume } from "../models";
 import { sendError, sendSuccess } from "../utils/apiResponse";
 import { buildSystemPrompt } from "../utils/buildPrompt";
 import { catchAsync } from "../utils/errorHandler";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 // chatbot.controller.ts
 export const chat = catchAsync(async (req: Request, res: Response) => {

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Banner } from "../models";
 import { catchAsync, AppError } from "../utils/errorHandler";
 import { sendSuccess } from "../utils/apiResponse";

@@ -1,7 +1,7 @@
-import { IBio } from "../models/Bio";
-import { IBlog } from "../models/Blog";
-import { IProject } from "../models/Project";
-import { IResume } from "../models/Resume";
+import type { IBio } from "../models/Bio";
+import type { IBlog } from "../models/Blog";
+import type { IProject } from "../models/Project";
+import type { IResume } from "../models/Resume";
 
 interface PortfolioData {
   bio: IBio[];

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Resume } from "../models";
 import { catchAsync, AppError } from "../utils/errorHandler";
 import { sendSuccess } from "../utils/apiResponse";
@@ -48,25 +48,27 @@ export const getAllResumes = catchAsync(async (req: Request, res: Response) => {
 });
 
 // POST /api/resume/upload
-export const uploadResume = catchAsync(async (req: Request, res: Response) => {
-  if (!req.file) throw new AppError("Please upload a PDF file", 400);
+export const uploadResume = catchAsync(
+  async (req: Request & { file?: any }, res: Response) => {
+    if (!req.file) throw new AppError("Please upload a PDF file", 400);
 
-  const file = req.file as Express.Multer.File & {
-    path: string;
-    filename: string;
-    size: number;
-  };
+    const file = req.file as File & {
+      path: string;
+      filename: string;
+      size: number;
+    };
 
-  const resume = await Resume.create({
-    fileName: file.filename,
-    fileUrl: file.path,
-    fileSize: Math.round(file.size / 1024),
-    version: req.body.version || "1.0",
-    isActive: req.body.isActive === "true",
-  });
+    const resume = await Resume.create({
+      fileName: file.filename,
+      fileUrl: file.path,
+      fileSize: Math.round(file.size / 1024),
+      version: req.body.version || "1.0",
+      isActive: req.body.isActive === "true",
+    });
 
-  sendSuccess(res, 201, "Resume uploaded", resume);
-});
+    sendSuccess(res, 201, "Resume uploaded", resume);
+  },
+);
 
 // PATCH /api/resume/:id/activate
 export const activateResume = catchAsync(

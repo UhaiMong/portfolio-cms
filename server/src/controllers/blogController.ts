@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Blog } from "../models";
 import { catchAsync, AppError } from "../utils/errorHandler";
 import { sendSuccess } from "../utils/apiResponse";
@@ -67,7 +67,7 @@ export const getAllBlogs = catchAsync(async (req: Request, res: Response) => {
 // GET /api/blog/:slug
 export const getBlogBySlug = catchAsync(async (req: Request, res: Response) => {
   const blog = await Blog.findOneAndUpdate(
-    { slug: req.params.slug, status: "published" },
+    { slug: req.params.slug, status: "published" } as Record<string, unknown>,
     { $inc: { views: 1 } },
     { returnDocument: "after" },
   );
@@ -91,41 +91,45 @@ export const getAllTags = catchAsync(async (req: Request, res: Response) => {
 // Protected
 
 // POST /api/blog
-export const createBlog = catchAsync(async (req: Request, res: Response) => {
-  if (!req.file) throw new AppError("Thumbnail is required", 400);
+export const createBlog = catchAsync(
+  async (req: Request & { file?: any }, res: Response) => {
+    if (!req.file) throw new AppError("Thumbnail is required", 400);
 
-  const blog = await Blog.create({
-    ...parseBody(req.body),
-    thumbnail: (req.file as any).path,
-  });
+    const blog = await Blog.create({
+      ...parseBody(req.body),
+      thumbnail: (req.file as any).path,
+    });
 
-  sendSuccess(res, 201, "Blog post created", blog);
-});
+    sendSuccess(res, 201, "Blog post created", blog);
+  },
+);
 
 // PATCH /api/blog/:id
-export const updateBlog = catchAsync(async (req: Request, res: Response) => {
-  const updates: any = parseBody(req.body);
-  if (req.file) {
-    const existing = await Blog.findById(req.params.id).select("thumbnail");
-    if (existing?.thumbnail) {
-      const publicId = existing.thumbnail
-        .split("/")
-        .slice(-2)
-        .join("/")
-        .split(".")[0];
-      await cloudinary.uploader.destroy(publicId).catch(() => null);
+export const updateBlog = catchAsync(
+  async (req: Request & { file?: any }, res: Response) => {
+    const updates: any = parseBody(req.body);
+    if (req.file) {
+      const existing = await Blog.findById(req.params.id).select("thumbnail");
+      if (existing?.thumbnail) {
+        const publicId = existing.thumbnail
+          .split("/")
+          .slice(-2)
+          .join("/")
+          .split(".")[0];
+        await cloudinary.uploader.destroy(publicId).catch(() => null);
+      }
+      updates.thumbnail = (req.file as any).path;
     }
-    updates.thumbnail = (req.file as any).path;
-  }
 
-  const blog = await Blog.findById(req.params.id);
-  if (!blog) throw new AppError("Blog post not found", 404);
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) throw new AppError("Blog post not found", 404);
 
-  Object.assign(blog, updates);
-  await blog.save();
+    Object.assign(blog, updates);
+    await blog.save();
 
-  sendSuccess(res, 200, "Blog post updated", blog);
-});
+    sendSuccess(res, 200, "Blog post updated", blog);
+  },
+);
 
 // DELETE /api/blog/:id
 export const deleteBlog = catchAsync(async (req: Request, res: Response) => {

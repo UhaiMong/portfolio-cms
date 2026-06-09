@@ -12,7 +12,7 @@ cloudinary.config({
 // Generic image storage (projects, blog, banner, bio)
 const imageStorage = new CloudinaryStorage({
   cloudinary,
-  params: async (_req: Express.Request, file: Express.Multer.File) => {
+  params: async (req: any, file: any) => {
     const baseName = path.parse(file.originalname).name.replace(/\s+/g, "_");
     return {
       folder: "portfolio-cms/images",
@@ -25,7 +25,7 @@ const imageStorage = new CloudinaryStorage({
 // Resume PDF storage
 const resumeStorage = new CloudinaryStorage({
   cloudinary,
-  params: async (_req: Express.Request, file: Express.Multer.File) => {
+  params: async (req: any, file: any) => {
     const baseName = path.parse(file.originalname).name.replace(/\s+/g, "_");
 
     return {

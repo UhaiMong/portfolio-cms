@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { verifyToken, JwtPayload } from "../utils/jwt";
+import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/errorHandler";
 import Admin from "../models/Admin";
+import { verifyToken, type JwtPayload } from "../utils/jwt";
 
 // Extend Express Request to include admin user
 declare global {

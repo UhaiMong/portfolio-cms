@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { protect } from "../middleware/auth";
 import { chat } from "../controllers/chatboot.controller";
 
 // Optional auth — attaches req.admin if token present but doesn't block
@@ -17,7 +16,6 @@ const optionalAuth = (req: any, res: any, next: any) => {
 const router = Router();
 
 // Public
-// router.get("/", optionalAuth, getMyContext);
 router.post("/chat", chat);
 
 // Protected

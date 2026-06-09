@@ -1,6 +1,7 @@
 import cors from "cors";
 import "dotenv/config";
-import express, { Application, Request, Response } from "express";
+import express from "express";
+import type { Application, Request, Response } from "express";
 import helmet from "helmet";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
@@ -15,6 +16,7 @@ import resumeRoutes from "./routes/resumeRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import mediaRoutes from "./routes/mediaRoutes";
 import chatbootRoutes from "./routes/chatbootRoutes";
+import type { from } from "node:stream/iter";
 
 const app: Application = express();
 
