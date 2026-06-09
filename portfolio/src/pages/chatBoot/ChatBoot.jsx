@@ -72,7 +72,7 @@ export default function ChatBot() {
           content: "Oops! Something went wrong. Please try again.",
         },
       ]);
-      toast.error(messages);
+      toast.error("Something went wrong please try again!");
     } finally {
       setLoading(false);
     }

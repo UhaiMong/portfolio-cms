@@ -46,10 +46,11 @@ export const chat = catchAsync(async (req: Request, res: Response) => {
     });
 
     const reply = response.text ?? "Sorry, I could not generate a response.";
-
     sendSuccess(res, 200, "Reply generated", { reply });
   } catch (error: any) {
-    console.error("CHATBOT ERROR:", error?.message || error);
+    console.error("CHATBOT ERROR FULL:", error);
+    console.error("CHATBOT ERROR MESSAGE:", error?.message);
+    console.error("CHATBOT ERROR STATUS:", error?.status);
     return sendError(res, 500, error?.message || "Internal error");
   }
 });

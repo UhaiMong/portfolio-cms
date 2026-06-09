@@ -49,7 +49,6 @@ export default function ProjectsPage({ standalone = true }) {
   const projects = data?.projects || [];
   // Explicitly rendering only featured items matching your exact logic
   const featuredProjects = projects.filter((p) => p.featured === true);
-  console.log(featuredProjects);
 
   const handleMouseMove = (e, id) => {
     const card = e.currentTarget;
