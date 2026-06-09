@@ -1,11 +1,10 @@
-import { geminiModel } from "../config/gimini";
 import { Bio, Blog, Project, Resume } from "../models";
 import { sendError, sendSuccess } from "../utils/apiResponse";
 import { buildSystemPrompt } from "../utils/buildPrompt";
 import { catchAsync } from "../utils/errorHandler";
 import type { Request, Response } from "express";
+import { genAI } from "../config/gimini";
 
-// chatbot.controller.ts
 export const chat = catchAsync(async (req: Request, res: Response) => {
   try {
     const { message, history = [] } = req.body;
@@ -30,18 +29,26 @@ export const chat = catchAsync(async (req: Request, res: Response) => {
         parts: [{ text: m.content }],
       }));
 
-    const model = geminiModel(systemPrompt);
-
-    const chatSession = model.startChat({
-      history: formattedHistory,
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: {
+        systemInstruction: systemPrompt,
+        maxOutputTokens: 500,
+        temperature: 0.7,
+      },
+      contents: [
+        ...formattedHistory,
+        {
+          role: "user",
+          parts: [{ text: message.trim() }],
+        },
+      ],
     });
 
-    const result = await chatSession.sendMessage(message.trim());
-    const reply = result.response.text();
+    const reply = response.text ?? "Sorry, I could not generate a response.";
 
     sendSuccess(res, 200, "Reply generated", { reply });
   } catch (error: any) {
-    // 👇 This will show exact error in terminal
     console.error("CHATBOT ERROR:", error?.message || error);
     return sendError(res, 500, error?.message || "Internal error");
   }
