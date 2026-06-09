@@ -19,18 +19,19 @@ import chatbootRoutes from "./routes/chatbootRoutes";
 
 const app: Application = express();
 
+app.set("trust proxy", 1);
+
 // Security headers
 app.use(helmet());
 // Compress responses
 app.use(compression());
 
 // Rate limiting
-
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per window
-  standardHeaders: true, // return rate limit info in the RateLimit-* headers
-  legacyHeaders: false, // disable the X-RateLimit-* headers
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 app.use("/api", apiLimiter);
