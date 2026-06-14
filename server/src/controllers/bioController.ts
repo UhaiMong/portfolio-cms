@@ -22,6 +22,7 @@ export const createBio = catchAsync(async (req: Request, res: Response) => {
 // PATCH /api/bio/:id
 export const updateBio = catchAsync(async (req: Request, res: Response) => {
   const bio = await Bio.findByIdAndUpdate(req.params.id, req.body, {
+    returnDocument: "after",
     new: true,
     runValidators: true,
   });
@@ -34,7 +35,7 @@ export const updateSkills = catchAsync(async (req: Request, res: Response) => {
   const bio = await Bio.findByIdAndUpdate(
     req.params.id,
     { skills: req.body.skills },
-    { new: true },
+    { returnDocument: "after", new: true },
   );
   if (!bio) throw new AppError("Bio not found", 404);
   sendSuccess(res, 200, "Skills updated", bio);
@@ -46,7 +47,7 @@ export const updateExperience = catchAsync(
     const bio = await Bio.findByIdAndUpdate(
       req.params.id,
       { experience: req.body.experience },
-      { new: true },
+      { returnDocument: "after", new: true },
     );
     if (!bio) throw new AppError("Bio not found", 404);
     sendSuccess(res, 200, "Experience updated", bio);
@@ -59,7 +60,7 @@ export const updateEducation = catchAsync(
     const bio = await Bio.findByIdAndUpdate(
       req.params.id,
       { education: req.body.education },
-      { new: true },
+      { returnDocument: "after", new: true },
     );
     if (!bio) throw new AppError("Bio not found", 404);
     sendSuccess(res, 200, "Education updated", bio);

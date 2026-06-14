@@ -59,7 +59,7 @@ export const getContact = catchAsync(async (req: Request, res: Response) => {
   const contact = await Contact.findByIdAndUpdate(
     req.params.id,
     { $set: { status: "read" } },
-    { new: true },
+    { returnDocument: "after", new: true },
   );
   if (!contact) throw new AppError("Message not found", 404);
   sendSuccess(res, 200, "Contact fetched", contact);
@@ -71,7 +71,7 @@ export const updateStatus = catchAsync(async (req: Request, res: Response) => {
   const contact = await Contact.findByIdAndUpdate(
     req.params.id,
     { status },
-    { new: true },
+    { returnDocument: "after", new: true },
   );
   if (!contact) throw new AppError("Message not found", 404);
   sendSuccess(res, 200, "Status updated", contact);

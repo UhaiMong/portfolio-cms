@@ -31,7 +31,7 @@ const statusVariant = (s: string) =>
 export default function ProjectsPage() {
   const dispatch = useAppDispatch();
   const { projects, loading } = useAppSelector((s) => s.projects);
-
+  console.log(projects);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [modalOpen, setModalOpen] = useState(false);

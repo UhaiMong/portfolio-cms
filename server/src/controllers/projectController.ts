@@ -115,7 +115,7 @@ export const updateProject = catchAsync(async (req: Request, res: Response) => {
   const project = await Project.findByIdAndUpdate(
     req.params.id,
     updatePayload,
-    { new: true, runValidators: true },
+    { returnDocument: "after", new: true, runValidators: true },
   );
 
   if (!project) return sendError(res, 404, "Project not found");

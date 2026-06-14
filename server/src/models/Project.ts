@@ -17,6 +17,7 @@ export interface IProject extends Document {
   order: number;
   views: number;
   createdAt: Date;
+  isPrivate: boolean;
   updatedAt: Date;
 }
 
@@ -41,6 +42,7 @@ const ProjectSchema = new Schema<IProject>(
     githubUrl: { type: String, default: "" },
     order: { type: Number, default: 0 },
     views: { type: Number, default: 0 },
+    isPrivate: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

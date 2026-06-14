@@ -83,7 +83,7 @@ export const updateMe = catchAsync(async (req: Request, res: Response) => {
   const admin = await Admin.findByIdAndUpdate(
     req.admin?.id,
     { name, avatar },
-    { new: true, runValidators: true },
+    { returnDocument: "after", new: true, runValidators: true },
   );
 
   sendSuccess(res, 200, "Profile updated successfully", admin);

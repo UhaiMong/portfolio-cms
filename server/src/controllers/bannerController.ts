@@ -27,6 +27,7 @@ export const createBanner = catchAsync(async (req: Request, res: Response) => {
 // PATCH /api/banner/:id
 export const updateBanner = catchAsync(async (req: Request, res: Response) => {
   const banner = await Banner.findByIdAndUpdate(req.params.id, req.body, {
+    returnDocument: "after",
     new: true,
     runValidators: true,
   });
@@ -41,7 +42,7 @@ export const activateBanner = catchAsync(
     const banner = await Banner.findByIdAndUpdate(
       req.params.id,
       { isActive: true },
-      { new: true },
+      { returnDocument: "after", new: true },
     );
     if (!banner) throw new AppError("Banner not found", 404);
     sendSuccess(res, 200, "Banner activated", banner);

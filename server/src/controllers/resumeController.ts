@@ -77,7 +77,7 @@ export const activateResume = catchAsync(
     const resume = await Resume.findByIdAndUpdate(
       req.params.id,
       { isActive: true },
-      { new: true },
+      { returnDocument: "after", new: true },
     );
     if (!resume) throw new AppError("Resume not found", 404);
     sendSuccess(res, 200, "Resume activated", resume);

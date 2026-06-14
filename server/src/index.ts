@@ -4,7 +4,7 @@ import express from "express";
 import type { Application, Request, Response } from "express";
 import helmet from "helmet";
 import compression from "compression";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import connectDB from "./config/db";
 import { globalErrorHandler } from "./utils/errorHandler";
 import authRoutes from "./routes/authRoutes";
@@ -27,14 +27,14 @@ app.use(helmet());
 app.use(compression());
 
 // Rate limiting
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// const apiLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 100,
+//   standardHeaders: true,
+//   legacyHeaders: false,
+// });
 
-app.use("/api", apiLimiter);
+// app.use("/api", apiLimiter);
 
 // CORS
 const allowedOrigins = process.env.CORS_ORIGINS?.split(",") || [];

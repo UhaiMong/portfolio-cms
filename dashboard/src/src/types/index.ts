@@ -29,6 +29,7 @@ export interface Project {
   category: string;
   status: "completed" | "in-progress" | "archived";
   featured: boolean;
+  isPrivate: boolean;
   liveUrl?: string;
   githubUrl?: string;
   order: number;

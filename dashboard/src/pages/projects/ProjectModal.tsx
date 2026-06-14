@@ -20,6 +20,7 @@ const schema = z.object({
   category: z.string().min(1, "Category is required"),
   status: z.enum(["completed", "in-progress", "archived"]),
   featured: z.boolean(),
+  isPrivate: z.boolean(),
   liveUrl: z.url("Must be a valid URL").or(z.literal("")).optional(),
   githubUrl: z.url("Must be a valid URL").or(z.literal("")).optional(),
   order: z.number().min(0),
@@ -77,6 +78,7 @@ export default function ProjectModal({ project, onClose }: Props) {
       category: project?.category ?? "",
       status: project?.status ?? "completed",
       featured: project?.featured ?? false,
+      isPrivate: project?.isPrivate ?? false,
       liveUrl: project?.liveUrl ?? "",
       githubUrl: project?.githubUrl ?? "",
       order: project?.order ?? 0,
@@ -113,6 +115,7 @@ export default function ProjectModal({ project, onClose }: Props) {
     fd.append("category", data.category);
     fd.append("status", data.status);
     fd.append("featured", String(data.featured));
+    fd.append("isPrivate", String(data.isPrivate));
     fd.append("order", String(data.order));
     if (data.longDescription)
       fd.append("longDescription", data.longDescription);
@@ -145,7 +148,7 @@ export default function ProjectModal({ project, onClose }: Props) {
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl ">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 shrink-0">
             <h2 className="text-lg font-semibold text-white">
@@ -258,9 +261,9 @@ export default function ProjectModal({ project, onClose }: Props) {
                 )}
               </div>
 
-              {/* Title & Category */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
+              {/* Title . Category */}
+              <div className="grid grid-cols-12 gap-x-4">
+                <div className="col-span-8">
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">
                     Title <span className="text-red-400">*</span>
                   </label>
@@ -275,7 +278,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                     </p>
                   )}
                 </div>
-                <div>
+                <div className="col-span-4">
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">
                     Category <span className="text-red-400">*</span>
                   </label>
@@ -323,17 +326,6 @@ export default function ProjectModal({ project, onClose }: Props) {
                   {errors.longDescription.message}
                 </p>
               )}
-              {/* <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">
-                  Long Description
-                </label>
-                <textarea
-                  {...register("longDescription")}
-                  rows={4}
-                  placeholder="Detailed project overview, challenges, solutions..."
-                  className={inputCls() + " resize-none"}
-                />
-              </div> */}
 
               {/* Tech Stack */}
               <div>
@@ -384,9 +376,9 @@ export default function ProjectModal({ project, onClose }: Props) {
                 )}
               </div>
 
-              {/* Status · Order · Featured */}
-              <div className="grid grid-cols-3 gap-4">
-                <div>
+              {/* Status · Order */}
+              <div className="grid grid-cols-12 gap-x-4">
+                <div className="col-span-6">
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">
                     Status
                   </label>
@@ -399,7 +391,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                     <option value="archived">Archived</option>
                   </select>
                 </div>
-                <div>
+                <div className="col-span-6">
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">
                     Order
                   </label>
@@ -416,30 +408,12 @@ export default function ProjectModal({ project, onClose }: Props) {
                     </p>
                   )}
                 </div>
-                <div className="flex flex-col justify-end pb-1">
-                  <p className="text-sm font-medium text-gray-300 mb-2">
-                    Featured
-                  </p>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <div className="relative">
-                      <input
-                        {...register("featured")}
-                        type="checkbox"
-                        className="sr-only peer"
-                      />
-                      <div className="w-10 h-5 bg-gray-700 peer-checked:bg-indigo-600 rounded-full transition-colors" />
-                      <div className="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
-                    </div>
-                    <span className="text-sm text-gray-300">
-                      Mark as featured
-                    </span>
-                  </label>
-                </div>
+                <div className="flex flex-col justify-end pb-1"></div>
               </div>
 
-              {/* URLs */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
+              {/* URLs . Featured*/}
+              <div className="grid grid-cols-12 items-center gap-x-4">
+                <div className="col-span-10">
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">
                     Live URL
                   </label>
@@ -454,7 +428,26 @@ export default function ProjectModal({ project, onClose }: Props) {
                     </p>
                   )}
                 </div>
-                <div>
+                <div className="col-span-2">
+                  <p className="text-sm font-medium text-gray-300 mb-2">
+                    Featured?
+                  </p>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <div className="relative">
+                      <input
+                        {...register("featured")}
+                        type="checkbox"
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-5 bg-gray-700 peer-checked:bg-indigo-600 rounded-full transition-colors" />
+                      <div className="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
+                    </div>
+                  </label>
+                </div>
+              </div>
+              {/* Github repo . isPrivate */}
+              <div className="grid grid-cols-12 items-center gap-x-4">
+                <div className="col-span-10">
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">
                     GitHub URL
                   </label>
@@ -468,6 +461,23 @@ export default function ProjectModal({ project, onClose }: Props) {
                       {errors.githubUrl.message}
                     </p>
                   )}
+                </div>
+                <div className="col-span-2">
+                  {" "}
+                  <p className="text-sm font-medium text-gray-300 mb-2">
+                    Private repo?
+                  </p>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <div className="relative">
+                      <input
+                        {...register("isPrivate")}
+                        type="checkbox"
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-5 bg-gray-700 peer-checked:bg-indigo-600 rounded-full transition-colors" />
+                      <div className="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
+                    </div>
+                  </label>
                 </div>
               </div>
             </form>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
@@ -12,14 +12,16 @@ const schema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
+
 type FormData = z.infer<typeof schema>;
 
 export default function LoginPage() {
+  const { loading, isAuthenticated } = useAppSelector((s) => s.auth);
+  const dispatch = useAppDispatch();
+
   const [showPass, setShowPass] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, isAuthenticated } = useAppSelector((s) => s.auth);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -28,22 +30,26 @@ export default function LoginPage() {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: FormData) => {
-    setApiError(null);
-    const res = await dispatch(login(data));
-
-    if (login.fulfilled.match(res)) {
-      toast.success("Welcome back! 🎉");
-      navigate("/dashboard", { replace: true });
-    } else {
-      // Show error both inline and as toast
-      const msg = (res.payload as string) || "Login failed. Please try again.";
+    try {
+      const res = await dispatch(login(data));
+      if (login.fulfilled.match(res)) {
+        (toast.success("Welcome to Portfolio Dashboard"),
+          navigate("/dashboard", { replace: true }));
+      }
+    } catch (error) {
+      const msg = (error as string) || "Login failed. Please try again.";
       setApiError(msg);
       toast.error(msg);
       dispatch(clearError());
@@ -127,20 +133,30 @@ export default function LoginPage() {
                   size={16}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                 />
-                <input
-                  {...register("password")}
-                  type={showPass ? "text" : "password"}
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                  onChange={() => setApiError(null)}
-                  className={`w-full bg-gray-800 border rounded-lg pl-9 pr-10 py-2.5 text-sm text-white
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type={showPass ? "text" : "password"}
+                      autoComplete="current-password"
+                      placeholder="••••••••"
+                      onChange={(e) => {
+                        setApiError(null);
+                        field.onChange(e); // keep RHF in sync
+                      }}
+                      className={`w-full bg-gray-800 border rounded-lg pl-9 pr-10 py-2.5 text-sm text-white
                     placeholder-gray-500 outline-none transition-colors
                     ${
                       errors.password
                         ? "border-red-500 focus:border-red-400"
                         : "border-gray-700 focus:border-indigo-500"
                     }`}
+                    />
+                  )}
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
