@@ -24,21 +24,11 @@ export default function About({ standalone = true }) {
   const [activeTab, setActiveTab] = useState("About");
 
   return (
-    <div className="w-full h-auto bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <div className="w-full h-auto bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white">
       <section
         className={`px-4 md:px-6 ${standalone ? "py-14" : "py-7"}
       relative overflow-hidden`}
       >
-        {/* Subtle dot grid background */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.02]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, #000 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-
         <div className="max-w-6xl mx-auto relative">
           {standalone && (
             <SectionHeading
@@ -75,14 +65,6 @@ export default function About({ standalone = true }) {
                   transition={{ duration: 0.6 }}
                   className="relative group w-full max-w-xs"
                 >
-                  {/* Decorative frame */}
-                  <div
-                    className="absolute -top-3 -left-3 w-full h-full
-                border border-black/5 dark:border-white/5 rounded-2xl
-                group-hover:border-black/20 dark:group-hover:border-white/20
-                transition-colors duration-500"
-                  />
-
                   <div
                     className="relative overflow-hidden rounded-2xl bg-black/3 dark:bg-white/3
                 aspect-4/5"
@@ -92,24 +74,13 @@ export default function About({ standalone = true }) {
                         loading="lazy"
                         src={bio.avatar}
                         alt={bio.name}
-                        className="w-full h-full object-cover object-top
-                      grayscale group-hover:grayscale-0
-                      transition-all duration-700 ease-out
-                      scale-105 group-hover:scale-100"
+                        className="w-full h-full object-cover object-top transition-all duration-700 ease-out scale-105 group-hover:scale-100"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <span className="text-6xl">👤</span>
                       </div>
                     )}
-
-                    {/* Overlay gradient */}
-                    <div
-                      className="absolute inset-0 bg-linear-to-t
-                  from-black/30 via-transparent to-transparent
-                  opacity-100 group-hover:opacity-0
-                  transition-opacity duration-700"
-                    />
 
                     {/* Name overlay */}
                     <div

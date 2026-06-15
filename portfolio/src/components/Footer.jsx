@@ -60,17 +60,29 @@ export default function Footer() {
     "Focus on building clean, high-performance applications with elegant UI.";
 
   return (
-    <footer className="w-full h-auto bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <footer className="w-full h-auto bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white">
       {/* Subtle background grid */}
       <div className="relative border-t border-black/10 dark:border-white/70 overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.015]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
+        <div className="absolute inset-0 z-0 opacity-[0.1] dark:opacity-[0.3] pointer-events-none">
+          <svg width="100%" height="100%">
+            <defs>
+              <pattern
+                id="grid"
+                width="60"
+                height="60"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 60 0 L 0 0 0 60"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </div>
 
         <div className="container mx-auto px-6 py-16 relative">
           {/* Top: Big name + tagline  */}

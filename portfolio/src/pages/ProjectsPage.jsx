@@ -21,6 +21,7 @@ import {
   SiTailwindcss,
   SiMongodb,
 } from "react-icons/si";
+import BackgroundGridBluePrint from "../components/ui/BackgroundGridBluePrint";
 
 const techMap = {
   "Node.js": { icon: SiNodedotjs, color: "text-green-500" },
@@ -68,28 +69,9 @@ export default function ProjectsPage({ standalone = true }) {
   };
 
   return (
-    <div className="w-full min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 overflow-hidden relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white overflow-hidden relative transition-colors duration-300">
       {/* Background Technology Grid Blueprint System */}
-      <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none">
-        <svg width="100%" height="100%">
-          <defs>
-            <pattern
-              id="grid"
-              width="60"
-              height="60"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M 60 0 L 0 0 0 60"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
+      <BackgroundGridBluePrint />
 
       <section
         className={`w-full max-w-7xl mx-auto px-4 md:px-8 z-10 relative ${standalone ? "py-24" : "py-12"}`}

@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import BackgroundGridBluePrint from "../components/ui/BackgroundGridBluePrint";
 
 export default function NotFound() {
   return (
-    <div className="w-full h-full overflow-y-scroll bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <div className="relative w-full h-full overflow-y-scroll bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white">
+      <BackgroundGridBluePrint />
       <div className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
