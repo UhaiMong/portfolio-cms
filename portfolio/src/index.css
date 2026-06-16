@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
 @variant dark (&:where(.dark, .dark *));
@@ -43,6 +44,80 @@ body {
     background-color 0.3s ease,
     color 0.3s ease;
   font-family: "Delius", cursive;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Herro section */
+@keyframes marquee-forward {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee-forward {
+  display: flex;
+  width: max-content;
+  animation: marquee-forward 25s linear infinite;
+}
+@keyframes hero-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes hero-spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+.hero-cube {
+  animation: hero-spin 50s linear infinite;
+  will-change: transform;
+}
+.hero-cube-reverse {
+  animation: hero-spin-reverse 60s linear infinite;
+  will-change: transform;
+}
+
+@keyframes hero-float-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(40px, 30px);
+  }
+}
+@keyframes hero-float-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-30px, -40px);
+  }
+}
+.hero-orb-a {
+  animation: hero-float-a 20s ease-in-out infinite;
+  will-change: transform;
+}
+.hero-orb-b {
+  animation: hero-float-b 24s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* Blog rich content styles */
