@@ -11,6 +11,7 @@ import {
 import { useData } from "../context/DataContext";
 import { useTheme } from "../context/ThemeContext";
 import { FiMail, FiNavigation, FiPhone, FiPhoneCall } from "react-icons/fi";
+import BackgroundGridBluePrint from "./ui/BackgroundGridBluePrint";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -60,77 +61,13 @@ export default function Footer() {
     "Focus on building clean, high-performance applications with elegant UI.";
 
   return (
-    <footer className="w-full h-auto bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white">
-      {/* Subtle background grid */}
+    <footer className="w-full h-auto bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
       <div className="relative border-t border-black/10 dark:border-white/70 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-[0.1] dark:opacity-[0.3] pointer-events-none">
-          <svg width="100%" height="100%">
-            <defs>
-              <pattern
-                id="grid"
-                width="60"
-                height="60"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 60 0 L 0 0 0 60"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
+        {/* Subtle background grid */}
+        <BackgroundGridBluePrint />
 
         <div className="container mx-auto px-6 py-16 relative">
           {/* Top: Big name + tagline  */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 pb-16 border-b border-black/5 dark:border-white/5"
-          >
-            <h2
-              className="text-5xl md:text-7xl font-bold uppercase tracking-tight
-            leading-none mb-6"
-            >
-              {name.split(" ").map((word, i) => (
-                <span key={i} className={i % 2 !== 0 ? "opacity-10" : ""}>
-                  {word}{" "}
-                </span>
-              ))}
-            </h2>
-            <p
-              className="text-sm uppercase
-            tracking-[0.2em] max-w-md leading-relaxed"
-            >
-              {tagline}
-            </p>
-
-            {/* CTA */}
-            <motion.div className="mt-8">
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-3 text-sm uppercase
-                tracking-widest
-                border border-black/20 dark:border-white/20
-                hover:border-black dark:hover:border-white
-                px-8 py-4 transition-all duration-500"
-              >
-                <span>Start a conversation</span>
-                <motion.span
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                >
-                  →
-                </motion.span>
-              </Link>
-            </motion.div>
-          </motion.div>
 
           {/* ── Main grid  */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">

@@ -116,7 +116,7 @@ export default function Contact({ standalone = true }) {
   ];
 
   return (
-    <div className="bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200 w-full h-auto">
+    <div className="bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 w-full h-auto">
       <section
         className={`px-4 md:px-6 overflow-hidden
       ${standalone ? "py-14" : "py-7"}`}
@@ -228,7 +228,7 @@ export default function Contact({ standalone = true }) {
                   transition={{ delay: 0.3 }}
                 >
                   <p className="text-xs tracking-[0.3em] uppercase mb-4">
-                    Follow me
+                    Reach me
                   </p>
                   <div className="flex gap-3 flex-wrap">
                     {socials.map((s, i) => {

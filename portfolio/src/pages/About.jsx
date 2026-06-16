@@ -24,7 +24,7 @@ export default function About({ standalone = true }) {
   const [activeTab, setActiveTab] = useState("About");
 
   return (
-    <div className="w-full h-auto bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white">
+    <div className="w-full h-auto bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
       <section
         className={`px-4 md:px-6 ${standalone ? "py-14" : "py-7"}
       relative overflow-hidden`}
@@ -83,7 +83,7 @@ export default function About({ standalone = true }) {
                     )}
 
                     {/* Name overlay */}
-                    <div
+                    {/* <div
                       className="absolute bottom-0 left-0 right-0 p-4
                   translate-y-0 group-hover:translate-y-2
                   transition-transform duration-500"
@@ -94,41 +94,9 @@ export default function About({ standalone = true }) {
                       <p className="text-[14px] font-semibold mt-0.5">
                         {bio.title}
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                 </motion.div>
-
-                {/* Stats grid */}
-                <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
-                  {[
-                    {
-                      num: `${bio.experience?.length || 0}+`,
-                      label: "Positions",
-                    },
-                    {
-                      num: `${bio.skills?.length || 0}+`,
-                      label: "Technologies",
-                    },
-                    { num: `${bio.education?.length || 0}`, label: "Degrees" },
-                    { num: data ? data : "20+", label: "Projects" },
-                  ].map(({ num, label }) => (
-                    <motion.div
-                      key={label}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      whileHover={{ y: -2 }}
-                      className="group p-4 border border-black/5 dark:border-white/5
-                    rounded-xl hover:border-black/20 dark:hover:border-white/20
-                    transition-all duration-300 text-center"
-                    >
-                      <p className="text-2xl font-bold leading-none">{num}</p>
-                      <p className="text-xs  mt-1 uppercase tracking-wider">
-                        {label}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
 
                 {/* Resume download */}
                 {resume?.fileUrl && (

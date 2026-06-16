@@ -22,6 +22,8 @@ import {
   SiMongodb,
 } from "react-icons/si";
 import BackgroundGridBluePrint from "../components/ui/BackgroundGridBluePrint";
+import FeaturedProjectCard from "./projects/FeaturedProjectCard";
+import CategoryFilter from "./projects/CategoryFilter";
 
 const techMap = {
   "Node.js": { icon: SiNodedotjs, color: "text-green-500" },
@@ -46,10 +48,36 @@ export default function ProjectsPage({ standalone = true }) {
   const [rotateX, setRotateX] = useState({});
   const [rotateY, setRotateY] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
+  const [hovered, setHovered] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [viewMode, setViewMode] = useState("grid");
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    pages: 1,
+    limit: 9,
+  });
+  // const [loading, setLoading] = useState(true);
 
   const projects = data?.projects || [];
+  const paginationMeta = data?.pagination;
+  if (paginationMeta) {
+    setPagination(paginationMeta);
+  }
+  const categories = [
+    ...new Set(projects.map((p) => p?.category).filter(Boolean)),
+  ];
+
+  const filtered =
+    activeCategory === "All"
+      ? projects
+      : projects.filter((p) => p?.category === activeCategory);
+
   // Explicitly rendering only featured items matching your exact logic
   const featuredProjects = projects.filter((p) => p.featured === true);
+  const project = featuredProjects[0];
 
   const handleMouseMove = (e, id) => {
     const card = e.currentTarget;
@@ -69,12 +97,14 @@ export default function ProjectsPage({ standalone = true }) {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white text-gray-900 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 dark:text-white overflow-hidden relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 overflow-hidden relative transition-colors duration-300">
       {/* Background Technology Grid Blueprint System */}
       <BackgroundGridBluePrint />
-
+      <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12">
+        <FeaturedProjectCard project={project} />
+      </section>
       <section
-        className={`w-full max-w-7xl mx-auto px-4 md:px-8 z-10 relative ${standalone ? "py-24" : "py-12"}`}
+        className={`w-full max-w-7xl mx-auto px-4 md:px-8 z-10 relative ${standalone ? "py-16" : "py-8"}`}
       >
         {standalone && (
           <div className="text-center mb-20">
@@ -83,7 +113,7 @@ export default function ProjectsPage({ standalone = true }) {
               animate={{ opacity: 1, y: 0 }}
               className="text-2xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-r from-neutral-900 via-neutral-700 to-neutral-500 dark:from-white dark:via-neutral-200 dark:to-neutral-500 mb-4 uppercase"
             >
-              Featured Creations
+              Load All Creatives
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 10 }}
@@ -91,8 +121,8 @@ export default function ProjectsPage({ standalone = true }) {
               transition={{ delay: 0.1 }}
               className="text-base md:text-lg text-neutral-500 dark:text-neutral-400 font-medium tracking-wide max-w-2xl mx-auto"
             >
-              Production-ready applications engineered with architectural
-              integrity.
+              Production-ready applications engineered and developed with
+              architectural integrity.
             </motion.p>
           </div>
         )}
@@ -107,15 +137,25 @@ export default function ProjectsPage({ standalone = true }) {
               </div>
             )}
 
-            {!loading && featuredProjects.length === 0 && (
+            {!loading && projects.length === 0 && (
               <p className="text-center text-neutral-500 py-16">
                 No featured projects found.
               </p>
             )}
-
-            {!loading && featuredProjects.length > 0 && (
+            <div className="overflow-hidden">
+              <div className="flex flex-wrap gap-2 mb-8">
+                {categories.length > 0 && (
+                  <CategoryFilter
+                    categories={categories}
+                    active={activeCategory}
+                    onChange={setActiveCategory}
+                  />
+                )}
+              </div>
+            </div>
+            {!loading && filtered.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-2000">
-                {featuredProjects?.map((project) => (
+                {filtered?.map((project) => (
                   <motion.div
                     key={project._id}
                     onMouseMove={(e) => handleMouseMove(e, project._id)}

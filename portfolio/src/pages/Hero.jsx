@@ -203,50 +203,7 @@ export default function Hero() {
   const marqueeIcons = skillIcons.length ? [...skillIcons, ...skillIcons] : [];
 
   return (
-    <div className="relative bg-white dark:bg-slate-950 transition-colors duration-500">
-      {/* Pure-CSS animations: marquee + slow cube spin (no JS render loop) */}
-      <style>{`
-        @keyframes hero-marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-        .hero-marquee-track {
-          animation: hero-marquee 28s linear infinite;
-          will-change: transform;
-        }
-        .hero-marquee-track:hover {
-          animation-play-state: paused;
-        }
-
-        @keyframes hero-spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes hero-spin-reverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
-        .hero-cube {
-          animation: hero-spin 50s linear infinite;
-          will-change: transform;
-        }
-        .hero-cube-reverse {
-          animation: hero-spin-reverse 60s linear infinite;
-          will-change: transform;
-        }
-
-        @keyframes hero-float-a {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(40px, 30px); }
-        }
-        @keyframes hero-float-b {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(-30px, -40px); }
-        }
-        .hero-orb-a { animation: hero-float-a 20s ease-in-out infinite; will-change: transform; }
-        .hero-orb-b { animation: hero-float-b 24s ease-in-out infinite; will-change: transform; }
-      `}</style>
-
+    <div className="relative bg-gray-200 dark:bg-slate-950 transition-colors duration-500">
       <section
         ref={sectionRef}
         className="relative w-full min-h-screen overflow-hidden flex flex-col"
@@ -254,7 +211,7 @@ export default function Hero() {
         {/* ================= BACKGROUND LAYER (z-0, behind everything) ================= */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           {/* Base gradient wash */}
-          <div className="absolute inset-0 bg-linear-to-br from-white via-indigo-50 to-violet-50 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-950" />
+          <div className="absolute inset-0 bg-linear-to-br from-gray-200 via-indigo-50 to-violet-50 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-950" />
 
           {/* Floating premium gradient orbs (pure CSS animation) */}
           <div
@@ -417,7 +374,7 @@ export default function Hero() {
               className="text-center text-xs tracking-[0.4em] uppercase mb-5
             text-slate-500 dark:text-slate-400 font-semibold"
             >
-              Skills On:
+              Skilled At_:
             </p>
 
             {/* Fixed-but-responsive centered width */}
@@ -431,7 +388,7 @@ export default function Hero() {
                     "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
                 }}
               >
-                <div className="hero-marquee-track flex w-max items-center gap-10 sm:gap-14">
+                <div className="animate-marquee-forward flex w-max items-center gap-10 sm:gap-14">
                   {marqueeIcons.map((icon, i) => (
                     <img
                       key={`${icon}-${i}`}

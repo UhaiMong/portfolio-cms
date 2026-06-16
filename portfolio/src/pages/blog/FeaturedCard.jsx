@@ -25,9 +25,7 @@ function FeaturedCard({ blog }) {
               alt={blog.title}
               variants={{ hover: { scale: 1.05 } }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="w-full h-full object-cover
-                grayscale group-hover:grayscale-0
-                transition-all duration-700"
+              className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-6xl">
