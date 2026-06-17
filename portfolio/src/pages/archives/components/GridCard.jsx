@@ -5,6 +5,7 @@ import StatusDot from "./StatusDot";
 import TechBadge from "./TechBadge";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Lock } from "lucide-react";
 
 // Grid Card
 function GridCard({ project, index }) {
@@ -52,7 +53,15 @@ function GridCard({ project, index }) {
                   <FiExternalLink size={12} /> Live Preview
                 </Link>
               )}
-              {project.githubUrl && (
+              {project.githubUrl && project.isPrivate ? (
+                <button
+                  disabled
+                  title="Private repository"
+                  className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors"
+                >
+                  <Lock className="w-[13px]" />
+                </button>
+              ) : (
                 <a
                   href={project.githubUrl}
                   target="_blank"

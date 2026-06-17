@@ -9,7 +9,7 @@ import { cloudinary } from "../config/cloudinary";
 // GET /api/projects
 export const getAllProjects = catchAsync(
   async (req: Request, res: Response) => {
-    const { status, featured, category, page = 1, limit = 10 } = req.query;
+    const { status, featured, category, page = 1, limit = 9 } = req.query;
 
     const filter: any = {};
     if (status) filter.status = status;
@@ -19,7 +19,7 @@ export const getAllProjects = catchAsync(
     const skip = (Number(page) - 1) * Number(limit);
     const [projects, total] = await Promise.all([
       Project.find(filter)
-        .sort({ order: 1, createdAt: -1 })
+        .sort({ featured: -1, order: 1, createdAt: -1 })
         .skip(skip)
         .limit(Number(limit)),
       Project.countDocuments(filter),

@@ -6,10 +6,10 @@ function CategoryFilter({ categories, active, onChange }) {
         <button
           key={cat}
           onClick={() => onChange(cat)}
-          className={`text-xs px-3 py-1.5 rounded-full tracking-wide transition-all duration-300
+          className={`text-xs px-3 py-1.5 rounded-lg tracking-wide transition-all duration-300
             ${
               active === cat
-                ? "bg-black dark:bg-white text-white dark:text-black"
+                ? "bg-linear-to-r from-brand-primary to-indigo-600 text-white"
                 : "border border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30"
             }`}
         >

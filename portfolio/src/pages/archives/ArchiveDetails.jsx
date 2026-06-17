@@ -22,6 +22,7 @@ import DetailsSkeleton from "./components/DetailsSkeleton";
 import TechBadge from "./components/TechBadge";
 import RichTextContent from "../../components/ui/RichTextContent";
 import ErrorState from "../../components/ui/ErrorState";
+import { Lock } from "lucide-react";
 
 // Main Component
 export default function ProjectGalleryDetails() {
@@ -79,7 +80,7 @@ export default function ProjectGalleryDetails() {
                 >
                   <div className="flex flex-wrap items-center gap-3 mb-4">
                     {project.category && (
-                      <span className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-green-400">
+                      <span className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-brand-primary">
                         <FiTag size={9} /> {project.category}
                       </span>
                     )}
@@ -123,7 +124,7 @@ export default function ProjectGalleryDetails() {
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-gray-950/30 to-transparent" />
                     {galleryImages?.length > 1 && (
-                      <div className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium">
+                      <div className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-white text-xs font-medium">
                         <FiLayers size={11} /> {galleryImages?.length} images
                       </div>
                     )}
@@ -146,12 +147,20 @@ export default function ProjectGalleryDetails() {
                   {project.liveUrl && (
                     <Link
                       to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold transition-colors shadow-[0_4px_16px_rgba(139,92,246,0.35)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.5)]"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-brand-primary to-indigo-800 text-white text-sm font-semibold"
                     >
                       <FiExternalLink size={12} /> Live Preview
                     </Link>
                   )}
-                  {project.githubUrl && (
+                  {project.githubUrl && project.isPrivate ? (
+                    <button
+                      disabled
+                      title="Private Repository"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:border-brand-primary hover:text-indigo-500 transition-colors"
+                    >
+                      <Lock className="w-3.5" /> Private
+                    </button>
+                  ) : (
                     <a
                       href={project.githubUrl}
                       target="_blank"
@@ -178,7 +187,7 @@ export default function ProjectGalleryDetails() {
                           onClick={() => setActiveTab(tab)}
                           className={`px-4 py-2.5 text-sm font-semibold capitalize border-b-2 -mb-px transition-colors ${
                             activeTab === tab
-                              ? "border-green-500 text-green-500 dark:text-green-400"
+                              ? "border-brand-primary text-brand-primary dark:text-light"
                               : "border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
                           }`}
                         >
@@ -278,7 +287,7 @@ export default function ProjectGalleryDetails() {
                   initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.25, duration: 0.5 }}
-                  className="flex flex-col gap-6"
+                  className="flex flex-col gap-6 sticky top-12 self-start"
                 >
                   {/* Project info pills */}
                   <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
@@ -357,7 +366,15 @@ export default function ProjectGalleryDetails() {
                           <FiExternalLink size={12} /> Live Preview
                         </Link>
                       )}
-                      {project.githubUrl && (
+                      {project.githubUrl && project.isPrivate ? (
+                        <button
+                          disabled
+                          title="Private Repository"
+                          className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 font-medium transition-colors"
+                        >
+                          <Lock className="w-[13px]" /> Private
+                        </button>
+                      ) : (
                         <a
                           href={project.githubUrl}
                           target="_blank"

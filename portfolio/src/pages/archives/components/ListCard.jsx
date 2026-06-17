@@ -4,6 +4,7 @@ import StatusDot from "./StatusDot";
 import { cardVariants } from "./CardVarients";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Lock } from "lucide-react";
 
 // List Card
 function ListCard({ project, index }) {
@@ -68,7 +69,15 @@ function ListCard({ project, index }) {
               <FiExternalLink size={12} /> Live Preview
             </Link>
           )}
-          {project.githubUrl && (
+          {project.githubUrl && project.isPrivate ? (
+            <button
+              disabled
+              title="Private Repository"
+              className="text-gray-400 hover:text-green-500 transition-colors"
+            >
+              <Lock className="w-3.5" />
+            </button>
+          ) : (
             <a
               href={project.githubUrl}
               target="_blank"

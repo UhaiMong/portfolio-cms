@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { motion } from "framer-motion";
 import useFetch from "../hooks/useFetch";
 import { getProjects } from "../services/portfolioService";
@@ -24,6 +24,8 @@ import {
 import BackgroundGridBluePrint from "../components/ui/BackgroundGridBluePrint";
 import FeaturedProjectCard from "./projects/FeaturedProjectCard";
 import CategoryFilter from "./projects/CategoryFilter";
+import Pagination from "../components/ui/Pagination";
+import { Link2Icon, Lock } from "lucide-react";
 
 const techMap = {
   "Node.js": { icon: SiNodedotjs, color: "text-green-500" },
@@ -42,8 +44,6 @@ const techMap = {
 };
 
 export default function ProjectsPage({ standalone = true }) {
-  const { data, loading, error, refetch } = useFetch(getProjects, {}, []);
-
   // Track precise mouse coordinates for 3D card tilt effect
   const [rotateX, setRotateX] = useState({});
   const [rotateY, setRotateY] = useState({});
@@ -52,20 +52,16 @@ export default function ProjectsPage({ standalone = true }) {
   const [selected, setSelected] = useState(null);
   const [viewMode, setViewMode] = useState("grid");
   const [activeCategory, setActiveCategory] = useState("All");
-
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    pages: 1,
-    limit: 9,
-  });
-  // const [loading, setLoading] = useState(true);
+  const page = 1;
+  const limit = 3;
+  const { data, loading, error, refetch } = useFetch(
+    getProjects,
+    { page, limit },
+    [page],
+  );
 
   const projects = data?.projects || [];
-  const paginationMeta = data?.pagination;
-  if (paginationMeta) {
-    setPagination(paginationMeta);
-  }
+
   const categories = [
     ...new Set(projects.map((p) => p?.category).filter(Boolean)),
   ];
@@ -192,8 +188,8 @@ export default function ProjectsPage({ standalone = true }) {
                         </div>
 
                         {/* Title & Info */}
-                        <Link to={project.liveUrl}>
-                          <h3 className="text-xl font-bold mt-5 mb-2 tracking-tight line-clamp-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                        <Link to={`/archives/${project.slug}`}>
+                          <h3 className="text-xl font-bold mt-5 mb-2 tracking-tight line-clamp-1 group-hover:text-brand-primary dark:group-hover:text-brand-secondary transition-colors">
                             {project.title}
                           </h3>
                         </Link>
@@ -239,7 +235,7 @@ export default function ProjectsPage({ standalone = true }) {
                     >
                       <Link
                         to={`/archives/${project.slug}`}
-                        className="flex-1 text-center text-xs py-2.5 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 font-semibold shadow-sm hover:bg-green-600 dark:hover:bg-green-400 dark:hover:text-neutral-950 hover:text-white transition-all duration-200"
+                        className="flex-1 text-center text-xs py-2.5 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 font-semibold shadow-sm hover:bg-brand-primary dark:hover:bg-brand-secondary dark:hover:text-neutral-950 hover:text-white transition-all duration-200"
                       >
                         View Details
                       </Link>
@@ -252,15 +248,24 @@ export default function ProjectsPage({ standalone = true }) {
                         >
                           Live
                         </Link>
-                        <a
-                          href={project?.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
-                          title="Source Code"
-                        >
-                          Code
-                        </a>
+                        {project.isPrivate ? (
+                          <button
+                            className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
+                            title="The repository is private"
+                          >
+                            <Lock className="w-3 h-3" />
+                          </button>
+                        ) : (
+                          <a
+                            href={project?.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
+                            title="Source Code"
+                          >
+                            Code
+                          </a>
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -269,6 +274,12 @@ export default function ProjectsPage({ standalone = true }) {
             )}
           </>
         )}
+        <Link
+          className="w-24 mt-4 flex justify-between items-center bg-linear-to-r from-brand-primary to-indigo-800 text-white font-semibold text-sm rounded-md shadow-2xl py-1.5 px-2"
+          to="/archives"
+        >
+          More <Link2Icon />{" "}
+        </Link>
       </section>
     </div>
   );

@@ -20,7 +20,7 @@ export const getContext = async () => {
 // Projects
 export const getProjects = async (params = {}) => {
   const res = await api.get("/projects", { params });
-  return res.data.data;
+  return res.data.data || res.data;
 };
 
 export const getProjectStats = async () => {

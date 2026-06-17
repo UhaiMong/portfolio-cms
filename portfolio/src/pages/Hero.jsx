@@ -213,7 +213,7 @@ export default function Hero() {
           {/* Base gradient wash */}
           <div className="absolute inset-0 bg-linear-to-br from-gray-200 via-indigo-50 to-violet-50 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-950" />
 
-          {/* Floating premium gradient orbs (pure CSS animation) */}
+          {/* Floating gradient orbs */}
           <div
             className="hero-orb-a absolute -top-32 -left-24 w-104 h-104 sm:w-lg sm:h-lg rounded-full blur-3xl
             bg-linear-to-br from-violet-400/40 via-fuchsia-400/25 to-amber-300/20

@@ -12,6 +12,8 @@
   --bg-header: #111318;
   --bg-input: #1a1d24;
   --bg-user: #5b4cff;
+  --bg-brand: #2563eb;
+  --bg-seondary: #1e40af;
   --bg-ai: #1e2130;
   --border: rgba(255, 255, 255, 0.07);
   --accent: #488e1d;
@@ -30,8 +32,9 @@
 }
 
 @theme {
-  --color-brand-primary: #2563eb;
-  --color-brand-secondary: #1e40af;
+  --color-brand-primary: var(--bg-brand);
+  --color-brand-secondary: var(--bg-seondary);
+  --color-light: var(--text-main);
   --shadow-soft: 0px 4px 20px rgba(0, 0, 0, 0.07);
   --radius-xl: 12px;
   --radius-xxl: 18px;
