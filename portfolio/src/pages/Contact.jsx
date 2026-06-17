@@ -18,6 +18,15 @@ import {
   FaXTwitter,
   FaInstagram,
 } from "react-icons/fa6";
+import {
+  User,
+  Mail,
+  ArrowRight,
+  Heading,
+  FileText,
+  MailCheck,
+  Heading1Icon,
+} from "lucide-react";
 import FloatingField from "./contact/FloatingField";
 import InfoCard from "./contact/InfoCard";
 import SuccessScreen from "./contact/SuccessScreen";
@@ -315,8 +324,149 @@ export default function Contact({ standalone = true }) {
                         )}
                       </AnimatePresence>
 
-                      {/* Row 1: Name + Email */}
-                      <div className="grid sm:grid-cols-2 gap-8">
+                      <div className="flex flex-col border border-black/10 dark:border-white/10 rounded-xl overflow-hidden bg-white/50 dark:bg-black/20 backdrop-blur-sm">
+                        {/* Header/Title Bar (Optional styling to feel like Gmail) */}
+                        <div className="bg-black/5 dark:bg-white/5 px-4 py-2 text-xs font-medium text-gray-500 flex items-center gap-2 border-b border-black/10 dark:border-white/10">
+                          <div className="w-3 h-3 rounded-full bg-red-400" />
+                          <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                          <div className="w-3 h-3 rounded-full bg-green-400" />
+                          <span className="ml-2 font-semibold">
+                            New Message
+                          </span>
+                        </div>
+
+                        <div className="p-4 flex flex-col gap-4">
+                          {/* --- From: Row --- */}
+
+                          <div>
+                            <span className="font-medium text-gray-400 w-12 mb-4">
+                              From:
+                            </span>
+                            <div className="grid sm:grid-cols-2 gap-4 items-start border-b border-black/5 dark:border-white/5 pb-4">
+                              <FloatingField
+                                label=""
+                                error={errors.name}
+                                required
+                              >
+                                <div className="relative flex items-center">
+                                  <User className="absolute left-3 w-4 h-4 text-gray-400" />
+                                  <input
+                                    type="text"
+                                    value={form.name}
+                                    onInput={onChange("name")}
+                                    placeholder="Your Name"
+                                    className={`${fieldCls(errors.name)} pl-10`}
+                                  />
+                                </div>
+                              </FloatingField>
+
+                              <FloatingField
+                                label=""
+                                error={errors.email}
+                                required
+                              >
+                                <div className="relative flex items-center">
+                                  <Mail className="absolute left-3 w-4 h-4 text-gray-400" />
+                                  <input
+                                    type="type"
+                                    value={form.email}
+                                    onInput={onChange("email")}
+                                    placeholder="your-email@example.com"
+                                    className={`${fieldCls(errors.email)} pl-10`}
+                                  />
+                                </div>
+                              </FloatingField>
+                            </div>
+                          </div>
+
+                          {/* --- To: Static Row --- */}
+                          <div className="py-2 border-b border-black/5 dark:border-white/5 text-sm">
+                            <span className="font-medium text-gray-400">
+                              To:{" "}
+                              <strong className="flex justify-start items-center gap-x-2.5">
+                                <MailCheck className="w-4 h-4 text-gray-400" />
+                                uhaimong.me@gmail.com
+                              </strong>
+                            </span>
+                          </div>
+
+                          {/* --- Subject Row --- */}
+                          <div className="border-b border-black/5 dark:border-white/5 pb-2">
+                            <FloatingField
+                              label=""
+                              error={errors.subject}
+                              required
+                            >
+                              <div className="relative flex items-center">
+                                <Heading1Icon className="absolute left-3 w-4 h-4 text-gray-400" />
+                                <input
+                                  type="text"
+                                  value={form.subject}
+                                  onInput={onChange("subject")}
+                                  placeholder="What's this about?"
+                                  className={`${fieldCls(errors.subject)} pl-10`}
+                                />
+                              </div>
+
+                              {/* Quick suggestion chips */}
+                              {!form.subject && (
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  className="flex gap-2 flex-wrap mt-3 pl-10"
+                                >
+                                  {suggestions.map((s) => (
+                                    <button
+                                      key={s}
+                                      type="button"
+                                      onClick={() =>
+                                        setForm((p) => ({ ...p, subject: s }))
+                                      }
+                                      className="text-xs px-3 py-1 rounded-full border border-black/5 dark:border-white/5  hover:border-black/20 dark:hover:border-white/20 hover:text-black/60 dark:hover:text-white/60 transition-all duration-200"
+                                    >
+                                      {s}
+                                    </button>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </FloatingField>
+                          </div>
+
+                          {/* --- Body / Message Row --- */}
+                          <div>
+                            <FloatingField
+                              label=""
+                              error={errors.message}
+                              required
+                            >
+                              <div className="relative">
+                                <FileText className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                                <textarea
+                                  rows={6}
+                                  value={form.message}
+                                  onInput={onChange("message")}
+                                  placeholder="Tell me about your project, idea, or just say hello..."
+                                  className={`${fieldCls(errors.message)} pl-10 pt-2.5 resize-none text-gray-300`}
+                                />
+                              </div>
+                              <div className="flex justify-end mt-1">
+                                <span
+                                  className={`text-xs transition-colors duration-300
+          ${
+            form.message.length < 20 && form.message.length > 0
+              ? "text-red-400"
+              : "text-gray-900 dark:text-gray-200"
+          }`}
+                                >
+                                  {form.message.length} / 20 min
+                                </span>
+                              </div>
+                            </FloatingField>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* <div className="grid sm:grid-cols-2 gap-8">
                         <FloatingField
                           label="Your Name"
                           error={errors.name}
@@ -345,7 +495,6 @@ export default function Contact({ standalone = true }) {
                         </FloatingField>
                       </div>
 
-                      {/* Subject */}
                       <FloatingField
                         label="Subject"
                         error={errors.subject}
@@ -358,7 +507,6 @@ export default function Contact({ standalone = true }) {
                           placeholder="What's this about?"
                           className={fieldCls(errors.subject)}
                         />
-                        {/* Quick suggestion chips */}
                         {!form.subject && (
                           <motion.div
                             initial={{ opacity: 0 }}
@@ -385,7 +533,6 @@ export default function Contact({ standalone = true }) {
                         )}
                       </FloatingField>
 
-                      {/* Message */}
                       <FloatingField
                         label="Message"
                         error={errors.message}
@@ -410,7 +557,7 @@ export default function Contact({ standalone = true }) {
                             {form.message.length} / 20 min
                           </span>
                         </div>
-                      </FloatingField>
+                      </FloatingField> */}
 
                       {/* Submit */}
                       <div className="flex items-center justify-between pt-2">

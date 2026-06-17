@@ -5,18 +5,20 @@ import { FiAlertCircle } from "react-icons/fi";
 function FloatingField({ label, error, children, required }) {
   return (
     <div className="relative group">
-      <label
-        className={`block text-xs tracking-widest uppercase mb-2
+      {label && (
+        <label
+          className={`block text-xs tracking-widest uppercase mb-2
         transition-colors duration-300
         ${
           error
             ? "text-red-400"
             : " group-focus-within:text-black dark:group-focus-within:text-white"
         }`}
-      >
-        {label}
-        {required && <span className="ml-0.5 opacity-50">*</span>}
-      </label>
+        >
+          {label}
+          {required && <span className="ml-0.5 opacity-50">*</span>}
+        </label>
+      )}
       {children}
       <AnimatePresence>
         {error && (

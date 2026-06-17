@@ -4,7 +4,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const FeaturedProjectCard = ({ project }) => {
-  console.log(project);
   return (
     <motion.div
       className="py-3"

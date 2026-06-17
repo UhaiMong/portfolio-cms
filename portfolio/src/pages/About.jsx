@@ -31,14 +31,7 @@ export default function About({ standalone = true }) {
       >
         <div className="max-w-6xl mx-auto relative">
           {standalone && (
-            <SectionHeading
-              label="Who I am"
-              title="About Me"
-              subtitle={
-                bio?.subtitle ||
-                "Crafting digital experiences with passion and precision."
-              }
-            />
+            <SectionHeading label="Who I am" title="About Me" subtitle="" />
           )}
 
           {!standalone && (
@@ -69,7 +62,7 @@ export default function About({ standalone = true }) {
                     className="relative overflow-hidden rounded-2xl bg-black/3 dark:bg-white/3
                 aspect-4/5"
                   >
-                    {bio.avatar ? (
+                    {bio?.avatar ? (
                       <img
                         loading="lazy"
                         src={bio.avatar}
@@ -81,20 +74,6 @@ export default function About({ standalone = true }) {
                         <span className="text-6xl">👤</span>
                       </div>
                     )}
-
-                    {/* Name overlay */}
-                    {/* <div
-                      className="absolute bottom-0 left-0 right-0 p-4
-                  translate-y-0 group-hover:translate-y-2
-                  transition-transform duration-500"
-                    >
-                      <p className="text-[16px] font-bold uppercase tracking-wide">
-                        {bio.name}
-                      </p>
-                      <p className="text-[14px] font-semibold mt-0.5">
-                        {bio.title}
-                      </p>
-                    </div> */}
                   </div>
                 </motion.div>
 

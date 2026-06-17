@@ -26,6 +26,7 @@ import FeaturedProjectCard from "./projects/FeaturedProjectCard";
 import CategoryFilter from "./projects/CategoryFilter";
 import Pagination from "../components/ui/Pagination";
 import { Link2Icon, Lock } from "lucide-react";
+import SectionHeading from "../components/ui/SectionHeading";
 
 const techMap = {
   "Node.js": { icon: SiNodedotjs, color: "text-green-500" },
@@ -103,23 +104,13 @@ export default function ProjectsPage({ standalone = true }) {
         className={`w-full max-w-7xl mx-auto px-4 md:px-8 z-10 relative ${standalone ? "py-16" : "py-8"}`}
       >
         {standalone && (
-          <div className="text-center mb-20">
-            <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-2xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-r from-neutral-900 via-neutral-700 to-neutral-500 dark:from-white dark:via-neutral-200 dark:to-neutral-500 mb-4 uppercase"
-            >
-              Load All Creatives
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-base md:text-lg text-neutral-500 dark:text-neutral-400 font-medium tracking-wide max-w-2xl mx-auto"
-            >
-              Production-ready applications engineered and developed with
-              architectural integrity.
-            </motion.p>
+          <div className="text-center">
+            <SectionHeading
+              label="Portfolio"
+              title="Load All Creatives"
+              subtitle="Production-ready applications engineered and developed with
+              architectural integrity"
+            />
           </div>
         )}
 

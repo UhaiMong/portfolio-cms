@@ -50,7 +50,6 @@ export default function ArchiveGallery() {
   useEffect(() => {
     refetch({ page, limit });
   }, [page]);
-  console.log(pagination);
   const categories = [
     ...new Set(projects.map((p) => p?.category).filter(Boolean)),
   ];
