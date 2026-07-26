@@ -16,20 +16,38 @@ export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const loadGlobalData = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const [bioData, bannerData, resumeData] = await Promise.allSettled([
         getBio(),
         getBanner(),
         getActiveResume(),
       ]);
-      if (bioData.status === "fulfilled") setBio(bioData.value);
-      if (bannerData.status === "fulfilled") setBanner(bannerData.value);
-      if (resumeData.status === "fulfilled") setResume(resumeData.value);
+      if (bioData.status === "fulfilled") {
+        setBio(bioData.value);
+      } else {
+        setError("Something went wrong");
+        console.error("Bio failed: ", bioData.reason);
+      }
+      if (bannerData.status === "fulfilled") {
+        setBanner(bannerData.value);
+      } else {
+        setError("Something went wrong");
+        console.error("Banner failed: ", bannerData.reason);
+      }
+      if (resumeData.status === "fulfilled") {
+        setResume(resumeData.value);
+      } else {
+        setError("Something went wrong");
+        console.error("Resume failed: ", resumeData.reason);
+      }
+
+      setLoading(false);
     } catch (err) {
       setError(err);
-      console.error("Failed to load global data:", err);
-    } finally {
       setLoading(false);
+      console.error("Failed to load global data:", err);
     }
   };
 

@@ -63,8 +63,7 @@ const validate = ({ name, email, subject, message }) => {
 const INIT = { name: "", email: "", subject: "", message: "" };
 
 const fieldCls = (err) =>
-  `w-full bg-transparent border-b py-3 text-sm outline-none
-   transition-all duration-300
+  `w-full bg-transparent placeholder:text-slate-700 dark:placeholder:text-slate-300 border-b py-3 text-sm text-slate-800 dark:text-slate-200 outline-none transition-all duration-300
    ${
      err
        ? "border-red-400"
@@ -336,10 +335,19 @@ export default function Contact({ standalone = true }) {
                         </div>
 
                         <div className="p-4 flex flex-col gap-4">
-                          {/* --- From: Row --- */}
-
+                          {/* To: */}
+                          <div className="py-2 border-b border-black/5 dark:border-white/5 text-sm">
+                            <span className="font-medium text-slate-900 dark:text-slate-300">
+                              To:{" "}
+                              <strong className="flex justify-start items-center gap-x-2.5">
+                                <MailCheck className="w-4 h-4 text-slate-900 dark:text-slate-300" />
+                                uhaimong.me@gmail.com
+                              </strong>
+                            </span>
+                          </div>
+                          {/* From:  */}
                           <div>
-                            <span className="font-medium text-gray-400 w-12 mb-4">
+                            <span className="font-medium text-slate-900 dark:text-slate-300 w-12 mb-4">
                               From:
                             </span>
                             <div className="grid sm:grid-cols-2 gap-4 items-start border-b border-black/5 dark:border-white/5 pb-4">
@@ -349,12 +357,12 @@ export default function Contact({ standalone = true }) {
                                 required
                               >
                                 <div className="relative flex items-center">
-                                  <User className="absolute left-3 w-4 h-4 text-gray-400" />
+                                  <User className="absolute left-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                   <input
                                     type="text"
                                     value={form.name}
                                     onInput={onChange("name")}
-                                    placeholder="Your Name"
+                                    placeholder="Uhai Mong"
                                     className={`${fieldCls(errors.name)} pl-10`}
                                   />
                                 </div>
@@ -366,31 +374,19 @@ export default function Contact({ standalone = true }) {
                                 required
                               >
                                 <div className="relative flex items-center">
-                                  <Mail className="absolute left-3 w-4 h-4 text-gray-400" />
+                                  <Mail className="absolute left-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                   <input
                                     type="type"
                                     value={form.email}
                                     onInput={onChange("email")}
-                                    placeholder="your-email@example.com"
+                                    placeholder="uhaimong@databist.com"
                                     className={`${fieldCls(errors.email)} pl-10`}
                                   />
                                 </div>
                               </FloatingField>
                             </div>
                           </div>
-
-                          {/* --- To: Static Row --- */}
-                          <div className="py-2 border-b border-black/5 dark:border-white/5 text-sm">
-                            <span className="font-medium text-gray-400">
-                              To:{" "}
-                              <strong className="flex justify-start items-center gap-x-2.5">
-                                <MailCheck className="w-4 h-4 text-gray-400" />
-                                uhaimong.me@gmail.com
-                              </strong>
-                            </span>
-                          </div>
-
-                          {/* --- Subject Row --- */}
+                          {/* Subject Row */}
                           <div className="border-b border-black/5 dark:border-white/5 pb-2">
                             <FloatingField
                               label=""
@@ -398,7 +394,7 @@ export default function Contact({ standalone = true }) {
                               required
                             >
                               <div className="relative flex items-center">
-                                <Heading1Icon className="absolute left-3 w-4 h-4 text-gray-400" />
+                                <Heading1Icon className="absolute left-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                 <input
                                   type="text"
                                   value={form.subject}
@@ -440,23 +436,24 @@ export default function Contact({ standalone = true }) {
                               required
                             >
                               <div className="relative">
-                                <FileText className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                                <FileText className="absolute left-3 top-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                 <textarea
                                   rows={6}
                                   value={form.message}
                                   onInput={onChange("message")}
                                   placeholder="Tell me about your project, idea, or just say hello..."
-                                  className={`${fieldCls(errors.message)} pl-10 pt-2.5 resize-none text-gray-300`}
+                                  className={`${fieldCls(errors.message)} pl-10 pt-2.5 resize-none`}
                                 />
                               </div>
                               <div className="flex justify-end mt-1">
                                 <span
                                   className={`text-xs transition-colors duration-300
-          ${
-            form.message.length < 20 && form.message.length > 0
-              ? "text-red-400"
-              : "text-gray-900 dark:text-gray-200"
-          }`}
+                                  ${
+                                    form.message.length < 20 &&
+                                    form.message.length > 0
+                                      ? "text-red-400"
+                                      : "text-gray-900 dark:text-gray-200"
+                                  }`}
                                 >
                                   {form.message.length} / 20 min
                                 </span>
@@ -465,100 +462,6 @@ export default function Contact({ standalone = true }) {
                           </div>
                         </div>
                       </div>
-
-                      {/* <div className="grid sm:grid-cols-2 gap-8">
-                        <FloatingField
-                          label="Your Name"
-                          error={errors.name}
-                          required
-                        >
-                          <input
-                            type="text"
-                            value={form.name}
-                            onInput={onChange("name")}
-                            placeholder="Uhai Mong"
-                            className={fieldCls(errors.name)}
-                          />
-                        </FloatingField>
-                        <FloatingField
-                          label="Email Address"
-                          error={errors.email}
-                          required
-                        >
-                          <input
-                            type="email"
-                            value={form.email}
-                            onInput={onChange("email")}
-                            placeholder="uhaimong.me@gmail.com"
-                            className={fieldCls(errors.email)}
-                          />
-                        </FloatingField>
-                      </div>
-
-                      <FloatingField
-                        label="Subject"
-                        error={errors.subject}
-                        required
-                      >
-                        <input
-                          type="text"
-                          value={form.subject}
-                          onInput={onChange("subject")}
-                          placeholder="What's this about?"
-                          className={fieldCls(errors.subject)}
-                        />
-                        {!form.subject && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="flex gap-2 flex-wrap mt-3"
-                          >
-                            {suggestions.map((s) => (
-                              <button
-                                key={s}
-                                type="button"
-                                onClick={() =>
-                                  setForm((p) => ({ ...p, subject: s }))
-                                }
-                                className="text-xs px-3 py-1 rounded-full
-                                border border-black/5 dark:border-white/5
-                                hover:border-black/20 dark:hover:border-white/20
-                                hover:text-black/60 dark:hover:text-white/60
-                                transition-all duration-200"
-                              >
-                                {s}
-                              </button>
-                            ))}
-                          </motion.div>
-                        )}
-                      </FloatingField>
-
-                      <FloatingField
-                        label="Message"
-                        error={errors.message}
-                        required
-                      >
-                        <textarea
-                          rows={5}
-                          value={form.message}
-                          onInput={onChange("message")}
-                          placeholder="Tell me about your project, idea, or just say hello..."
-                          className={fieldCls(errors.message) + " resize-none"}
-                        />
-                        <div className="flex justify-end mt-1">
-                          <span
-                            className={`text-xs transition-colors duration-300
-                          ${
-                            form.message.length < 20 && form.message.length > 0
-                              ? "text-red-400"
-                              : "text-gray-900 dark:text-gray-200"
-                          }`}
-                          >
-                            {form.message.length} / 20 min
-                          </span>
-                        </div>
-                      </FloatingField> */}
-
                       {/* Submit */}
                       <div className="flex items-center justify-between pt-2">
                         <p className="text-xs">

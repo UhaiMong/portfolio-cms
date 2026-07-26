@@ -14,7 +14,7 @@ export default function SectionHeading({ label, title, subtitle }) {
           {label}
         </span>
       )}
-      <h2 className="text-4xl md:text-5xl font-bold text-black/80 dark:text-white/80 leading-tight">
+      <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-600 via-sky-600 to-indigo-600 dark:from-cyan-400 dark:via-sky-300 dark:to-indigo-400 leading-tight ">
         {title}
       </h2>
       {subtitle && (

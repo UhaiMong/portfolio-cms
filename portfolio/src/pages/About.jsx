@@ -44,7 +44,7 @@ export default function About({ standalone = true }) {
               Who I am
             </motion.p>
           )}
-          {loading ? (
+          {loading && !error ? (
             <AboutSkeleton />
           ) : bio ? (
             <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-start justify-center">
