@@ -47,7 +47,7 @@ function GridCard({ project, index }) {
             >
               {project.liveUrl && (
                 <Link
-                  to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+                  to={`/project/live-preview/${project.slug}`}
                   className="flex items-center gap-2 text-xs tracking-widest uppercase px-4 py-2.5 bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors rounded-xl"
                 >
                   <FiExternalLink size={12} /> Live Preview

@@ -116,6 +116,16 @@ const SKILL_ICON_MAP = {
   "framer motion": "framer",
 };
 
+// `duration` is free text like "Jan 2022 - Present", so use the earliest 4-digit year.
+function yearsOfExperience(experience = []) {
+  const years = experience
+    .flatMap((e) => String(e?.duration || "").match(/\b(19|20)\d{2}\b/g) || [])
+    .map(Number);
+  if (!years.length) return null;
+  const total = new Date().getFullYear() - Math.min(...years);
+  return total > 0 ? `${total}+` : "1";
+}
+
 function toSkillIcon(skill) {
   if (!skill) return null;
   const key = String(skill).trim().toLowerCase();
@@ -347,7 +357,7 @@ export default function Hero() {
           flex-col gap-6 text-right"
         >
           {[
-            { num: bio?.experience?.length || "3+", label: "Years Exp." },
+            { num: yearsOfExperience(bio?.experience) || "3+", label: "Years Exp." },
             { num: data ? data : "20+", label: "Projects" },
             { num: bio?.skills?.length || "15+", label: "Technologies" },
           ].map(({ num, label }) => (

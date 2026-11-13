@@ -1,5 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import useFetch from "../hooks/useFetch";
 import { getProjects } from "../services/portfolioService";
 import ErrorState from "../components/ui/ErrorState";
@@ -23,8 +22,6 @@ import {
 } from "react-icons/si";
 import BackgroundGridBluePrint from "../components/ui/BackgroundGridBluePrint";
 import FeaturedProjectCard from "./projects/FeaturedProjectCard";
-import CategoryFilter from "./projects/CategoryFilter";
-import Pagination from "../components/ui/Pagination";
 import { Link2Icon, Lock } from "lucide-react";
 import SectionHeading from "../components/ui/SectionHeading";
 
@@ -44,62 +41,59 @@ const techMap = {
   MongoDB: { icon: SiMongodb, color: "text-emerald-500" },
 };
 
+const tiltSpring = { stiffness: 300, damping: 25, mass: 0.5 };
+
+function TiltCard({ children, className }) {
+  const rotateX = useSpring(useMotionValue(0), tiltSpring);
+  const rotateY = useSpring(useMotionValue(0), tiltSpring);
+  const z = useSpring(useMotionValue(0), tiltSpring);
+
+  const onMouseMove = (e) => {
+    const box = e.currentTarget.getBoundingClientRect();
+    rotateX.set(-(e.clientY - box.top - box.height / 2) / 12);
+    rotateY.set((e.clientX - box.left - box.width / 2) / 12);
+  };
+
+  const onMouseLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+    z.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={onMouseMove}
+      onMouseEnter={() => z.set(15)}
+      onMouseLeave={onMouseLeave}
+      style={{ rotateX, rotateY, z, transformStyle: "preserve-3d" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function ProjectsPage({ standalone = true }) {
-  // Track precise mouse coordinates for 3D card tilt effect
-  const [rotateX, setRotateX] = useState({});
-  const [rotateY, setRotateY] = useState({});
-  const [hoveredId, setHoveredId] = useState(null);
-  const [hovered, setHovered] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const [viewMode, setViewMode] = useState("grid");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const page = 1;
-  const limit = 3;
+  // Backend sorts featured first, so the first featured item here is the latest featured project.
   const { data, loading, error, refetch } = useFetch(
     getProjects,
-    { page, limit },
-    [page],
+    { page: 1, limit: 4 },
+    [],
   );
 
-  const projects = data?.projects || [];
-
-  const categories = [
-    ...new Set(projects.map((p) => p?.category).filter(Boolean)),
-  ];
-
-  const filtered =
-    activeCategory === "All"
-      ? projects
-      : projects.filter((p) => p?.category === activeCategory);
-
-  // Explicitly rendering only featured items matching your exact logic
-  const featuredProjects = projects.filter((p) => p.featured === true);
-  const project = featuredProjects[0];
-
-  const handleMouseMove = (e, id) => {
-    const card = e.currentTarget;
-    const box = card.getBoundingClientRect();
-    const x = e.clientX - box.left - box.width / 2;
-    const y = e.clientY - box.top - box.height / 2;
-
-    // Calculate degree rotation based on pointer coordinate bounds
-    setRotateX((prev) => ({ ...prev, [id]: -y / 12 }));
-    setRotateY((prev) => ({ ...prev, [id]: x / 12 }));
-  };
-
-  const handleMouseLeave = (id) => {
-    setHoveredId(null);
-    setRotateX((prev) => ({ ...prev, [id]: 0 }));
-    setRotateY((prev) => ({ ...prev, [id]: 0 }));
-  };
+  const all = data?.projects || [];
+  const project = all.find((p) => p.featured);
+  const projects = all.filter((p) => p !== project).slice(0, 3);
 
   return (
     <div className="w-full min-h-screen bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 overflow-hidden relative transition-colors duration-300">
       {/* Background Technology Grid Blueprint System */}
       <BackgroundGridBluePrint />
-      <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12">
-        <FeaturedProjectCard project={project} />
-      </section>
+      {project && (
+        <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12">
+          <FeaturedProjectCard project={project} />
+        </section>
+      )}
       <section
         className={`w-full max-w-7xl mx-auto px-4 md:px-8 z-10 relative ${standalone ? "py-16" : "py-8"}`}
       >
@@ -124,44 +118,16 @@ export default function ProjectsPage({ standalone = true }) {
               </div>
             )}
 
-            {!loading && projects.length === 0 && (
+            {!loading && all.length === 0 && (
               <p className="text-center text-neutral-500 py-16">
-                No featured projects found.
+                No projects found.
               </p>
             )}
-            <div className="overflow-hidden">
-              <div className="flex flex-wrap gap-2 mb-8">
-                {categories.length > 0 && (
-                  <CategoryFilter
-                    categories={categories}
-                    active={activeCategory}
-                    onChange={setActiveCategory}
-                  />
-                )}
-              </div>
-            </div>
-            {!loading && filtered.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-2000">
-                {filtered?.map((project) => (
-                  <motion.div
+            {!loading && projects.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-2000 mt-8">
+                {projects.map((project) => (
+                  <TiltCard
                     key={project._id}
-                    onMouseMove={(e) => handleMouseMove(e, project._id)}
-                    onMouseEnter={() => setHoveredId(project._id)}
-                    onMouseLeave={() => handleMouseLeave(project._id)}
-                    style={{
-                      rotateX: rotateX[project._id] || 0,
-                      rotateY: rotateY[project._id] || 0,
-                      transformStyle: "preserve-3d",
-                    }}
-                    animate={{
-                      z: hoveredId === project._id ? 15 : 0,
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 25,
-                      mass: 0.5,
-                    }}
                     className="relative group bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800/60 p-5 rounded-3xl shadow-sm hover:shadow-2xl transition-shadow duration-300 flex flex-col justify-between h-auto"
                   >
                     <div>
@@ -232,13 +198,15 @@ export default function ProjectsPage({ standalone = true }) {
                       </Link>
 
                       <div className="flex gap-2 shrink-0">
-                        <Link
-                          to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
-                          className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
-                          title="Live Demo"
-                        >
-                          Live
-                        </Link>
+                        {project.liveUrl && (
+                          <Link
+                            to={`/project/live-preview/${project.slug}`}
+                            className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
+                            title="Live Demo"
+                          >
+                            Live
+                          </Link>
+                        )}
                         {project.isPrivate ? (
                           <button
                             className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
@@ -246,9 +214,9 @@ export default function ProjectsPage({ standalone = true }) {
                           >
                             <Lock className="w-3 h-3" />
                           </button>
-                        ) : (
+                        ) : project.githubUrl && (
                           <a
-                            href={project?.githubUrl}
+                            href={project.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors"
@@ -259,7 +227,7 @@ export default function ProjectsPage({ standalone = true }) {
                         )}
                       </div>
                     </div>
-                  </motion.div>
+                  </TiltCard>
                 ))}
               </div>
             )}

@@ -1,9 +1,12 @@
 import { useState, useRef } from "preact/hooks";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import { useData } from "../context/DataContext";
 import { submitContact } from "../services/portfolioService";
 import { availabilityLabel } from "../utils/helpers";
 import SectionHeading from "../components/ui/SectionHeading";
+import Seo from "../components/Seo";
+import { SITE } from "../config/site";
 import {
   FiMail,
   FiMapPin,
@@ -78,6 +81,7 @@ export default function Contact({ standalone = true }) {
   const [status, setStatus] = useState("idle");
   const [apiErr, setApiErr] = useState("");
   const formRef = useRef(null);
+  const isContactPage = useLocation().pathname === "/contact";
 
   const avail = availabilityLabel(bio?.availability);
   const socials = bio?.socialLinks || [];
@@ -125,6 +129,13 @@ export default function Contact({ standalone = true }) {
 
   return (
     <div className="bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 w-full h-auto">
+      {isContactPage && (
+        <Seo
+          title="Contact"
+          description={`Get in touch with ${SITE.name}. Available for freelance projects, collaborations, and full-time roles.`}
+          path="/contact"
+        />
+      )}
       <section
         className={`px-4 md:px-6 overflow-hidden
       ${standalone ? "py-14" : "py-7"}`}
@@ -341,7 +352,7 @@ export default function Contact({ standalone = true }) {
                               To:{" "}
                               <strong className="flex justify-start items-center gap-x-2.5">
                                 <MailCheck className="w-4 h-4 text-slate-900 dark:text-slate-300" />
-                                uhaimong.me@gmail.com
+                                {bio?.email || "uhaimong.me@gmail.com"}
                               </strong>
                             </span>
                           </div>
@@ -360,9 +371,13 @@ export default function Contact({ standalone = true }) {
                                   <User className="absolute left-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                   <input
                                     type="text"
+                                    name="name"
+                                    autoComplete="name"
+                                    aria-label="Your name"
+                                    aria-invalid={!!errors.name}
                                     value={form.name}
                                     onInput={onChange("name")}
-                                    placeholder="Uhai Mong"
+                                    placeholder="Your name"
                                     className={`${fieldCls(errors.name)} pl-10`}
                                   />
                                 </div>
@@ -376,10 +391,15 @@ export default function Contact({ standalone = true }) {
                                 <div className="relative flex items-center">
                                   <Mail className="absolute left-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                   <input
-                                    type="type"
+                                    type="email"
+                                    name="email"
+                                    autoComplete="email"
+                                    inputMode="email"
+                                    aria-label="Your email"
+                                    aria-invalid={!!errors.email}
                                     value={form.email}
                                     onInput={onChange("email")}
-                                    placeholder="uhaimong@databist.com"
+                                    placeholder="you@company.com"
                                     className={`${fieldCls(errors.email)} pl-10`}
                                   />
                                 </div>
@@ -397,6 +417,9 @@ export default function Contact({ standalone = true }) {
                                 <Heading1Icon className="absolute left-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                 <input
                                   type="text"
+                                  name="subject"
+                                  aria-label="Subject"
+                                  aria-invalid={!!errors.subject}
                                   value={form.subject}
                                   onInput={onChange("subject")}
                                   placeholder="What's this about?"
@@ -439,6 +462,9 @@ export default function Contact({ standalone = true }) {
                                 <FileText className="absolute left-3 top-3 w-4 h-4 text-slate-900 dark:text-slate-300" />
                                 <textarea
                                   rows={6}
+                                  name="message"
+                                  aria-label="Message"
+                                  aria-invalid={!!errors.message}
                                   value={form.message}
                                   onInput={onChange("message")}
                                   placeholder="Tell me about your project, idea, or just say hello..."

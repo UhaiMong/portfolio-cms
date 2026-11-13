@@ -1,4 +1,5 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
+import { useTheme } from "../context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { getBlogs } from "../services/portfolioService";
 import useFetch from "../hooks/useFetch";
@@ -9,10 +10,22 @@ import BlogSkeleton from "./blog/BlogSkeleton";
 import FeaturedCard from "./blog/FeaturedCard";
 import BlogCard from "./blog/BlogCard";
 import BlogListItem from "./blog/BlogListItem";
+import Seo from "../components/Seo";
+import { SITE } from "../config/site";
 
 // Main Blog page
 export default function Blog() {
   const { data, loading, error, refetch } = useFetch(getBlogs, {}, []);
+  const { theme } = useTheme();
+
+  // LinkedIn's script scans the DOM once on load, so re-inject it whenever the badge remounts.
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://platform.linkedin.com/badges/js/profile.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => script.remove();
+  }, [theme]);
 
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState("All");
@@ -47,6 +60,11 @@ export default function Blog() {
 
   return (
     <div className="w-full bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
+      <Seo
+        title="Blog"
+        description={`Articles and notes by ${SITE.name} on code, design, and building products.`}
+        path="/blog"
+      />
       <div className="min-h-screen">
         {/*  Hero banner  */}
         <section className="relative pt-32 pb-20 px-4 md:px-6 overflow-hidden">
@@ -245,29 +263,26 @@ export default function Blog() {
             </>
           )}
         </div>
-        <div
-          class="badge-base LI-profile-badge"
-          data-locale="en_US"
-          data-size="medium"
-          data-theme="light"
-          data-type="HORIZONTAL"
-          data-vanity="uhai-mong"
-          data-version="v1"
-        >
-          <a
-            class="badge-base__link LI-simple-link"
-            href="https://bd.linkedin.com/in/uhai-mong?trk=profile-badge"
+        <div className="max-w-6xl mx-auto px-4 md:px-6 pb-16 flex justify-center">
+          <div
+            key={theme}
+            className="badge-base LI-profile-badge"
+            data-locale="en_US"
+            data-size="medium"
+            data-theme={theme}
+            data-type="HORIZONTAL"
+            data-vanity="uhai-mong"
+            data-version="v1"
           >
-            Uhai Mong
-          </a>
+            <a
+              className="badge-base__link LI-simple-link"
+              href="https://bd.linkedin.com/in/uhai-mong?trk=profile-badge"
+            >
+              Uhai Mong
+            </a>
+          </div>
         </div>
       </div>
-      <script
-        src="https://platform.linkedin.com/badges/js/profile.js"
-        async
-        defer
-        type="text/javascript"
-      ></script>
     </div>
   );
 }

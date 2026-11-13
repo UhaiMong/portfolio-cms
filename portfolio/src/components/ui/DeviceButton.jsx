@@ -1,9 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const DeviceButton = React.memo(({ icon, isActive, onClick }) => (
+const DeviceButton = React.memo(({ icon, label, isActive, onClick }) => (
   <motion.button
+    type="button"
     onClick={onClick}
+    aria-label={label}
+    aria-pressed={isActive}
+    title={label}
     whileHover={{ scale: 1.1 }}
     whileTap={{ scale: 0.95 }}
     animate={{

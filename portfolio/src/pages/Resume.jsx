@@ -13,6 +13,7 @@ import {
   FiTrendingDown,
 } from "react-icons/fi";
 import { getPdfUrl } from "../utils/resumes";
+import api from "../services/api";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Helpers
@@ -179,7 +180,7 @@ export default function Resume({ resume, loading, error, onDownload }) {
         <MetaBadge
           icon={FiTrendingDown}
           label="Downloads"
-          value={resume.downloadCount.toLocaleString()}
+          value={(resume.downloadCount ?? 0).toLocaleString()}
         />
         <MetaBadge
           icon={FiCalendar}

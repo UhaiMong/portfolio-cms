@@ -1,19 +1,64 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <meta
       name="google-site-verification"
       content="5RPrs3rWGZ875sjRfahg8vTNuh7DtRE_LZt7aLIT4WM"
     />
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio Uhai Mong</title>
-    <link href="/src/index.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+
+    <title>Uhai Mong | Full Stack Developer</title>
+    <meta
+      name="description"
+      content="Full stack developer building clean, high-performance web applications with React, Node.js, and modern UI. Available for freelance and full-time roles."
     />
+    <meta name="author" content="Uhai Mong" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://uhaimong-portfolio.vercel.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Uhai Mong" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Uhai Mong | Full Stack Developer" />
+    <meta
+      property="og:description"
+      content="Full stack developer building clean, high-performance web applications with React, Node.js, and modern UI."
+    />
+    <meta property="og:url" content="https://uhaimong-portfolio.vercel.app/" />
+    <meta
+      property="og:image"
+      content="https://uhaimong-portfolio.vercel.app/images/UhaiMongProfilePicture.jpg"
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Uhaimongmarma2" />
+    <meta name="twitter:title" content="Uhai Mong | Full Stack Developer" />
+    <meta
+      name="twitter:description"
+      content="Full stack developer building clean, high-performance web applications with React, Node.js, and modern UI."
+    />
+    <meta
+      name="twitter:image"
+      content="https://uhaimong-portfolio.vercel.app/images/UhaiMongProfilePicture.jpg"
+    />
+
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="/images/UhaiMongProfilePicture.jpg" />
+    <meta name="theme-color" content="#0f172a" />
+
+    <!-- Theme flash prevention (dark default matches ThemeContext) -->
+    <script>
+      try {
+        if (localStorage.getItem("theme") !== "light") {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

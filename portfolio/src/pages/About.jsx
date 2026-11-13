@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import { useData } from "../context/DataContext";
 import SectionHeading from "../components/ui/SectionHeading";
 import { FiDownload } from "react-icons/fi";
@@ -12,6 +13,8 @@ import ErrorState from "../components/ui/ErrorState";
 import useFetch from "../hooks/useFetch";
 import { getProjectStats } from "../services/portfolioService";
 import AboutSkeleton from "../components/ui/AboutSkeleton";
+import Seo from "../components/Seo";
+import { SITE } from "../config/site";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 //  Tabs
@@ -20,11 +23,24 @@ const TABS = ["About", "Skills", "Experience", "Education", "Resume"];
 // Main About component
 export default function About({ standalone = true }) {
   const { data } = useFetch(getProjectStats);
-  const { bio, resume, loading, error, refetch } = useData();
+  const { bio, resume, loading, error, errors, refetch } = useData();
   const [activeTab, setActiveTab] = useState("About");
+  const isAboutPage = useLocation().pathname === "/about";
 
   return (
     <div className="w-full h-auto bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
+      {isAboutPage && (
+        <Seo
+          title="About"
+          description={
+            bio?.about
+              ? bio.about.slice(0, 160)
+              : `Learn more about ${SITE.name}, ${SITE.jobTitle}.`
+          }
+          path="/about"
+          image={bio?.avatar || SITE.image}
+        />
+      )}
       <section
         className={`px-4 md:px-6 ${standalone ? "py-14" : "py-7"}
       relative overflow-hidden`}
@@ -180,8 +196,7 @@ export default function About({ standalone = true }) {
                       <Resume
                         resume={resume}
                         loading={loading}
-                        error={error}
-                        onDownload={() => dispatch(incrementDownloadCount())}
+                        error={errors.resume}
                       />
                     )}
                   </motion.div>

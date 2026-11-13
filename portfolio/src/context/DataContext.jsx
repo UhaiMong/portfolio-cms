@@ -12,43 +12,31 @@ export const DataProvider = ({ children }) => {
   const [bio, setBio] = useState(null);
   const [banner, setBanner] = useState(null);
   const [resume, setResume] = useState(null);
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
 
   const loadGlobalData = async () => {
     setLoading(true);
-    setError(null);
-    try {
-      const [bioData, bannerData, resumeData] = await Promise.allSettled([
-        getBio(),
-        getBanner(),
-        getActiveResume(),
-      ]);
-      if (bioData.status === "fulfilled") {
-        setBio(bioData.value);
+    setErrors({});
+    const sources = [
+      ["bio", getBio, setBio],
+      ["banner", getBanner, setBanner],
+      ["resume", getActiveResume, setResume],
+    ];
+    const results = await Promise.allSettled(sources.map(([, fn]) => fn()));
+    const nextErrors = {};
+    results.forEach((result, i) => {
+      const [key, , setValue] = sources[i];
+      if (result.status === "fulfilled") {
+        setValue(result.value);
       } else {
-        setError("Something went wrong");
-        console.error("Bio failed: ", bioData.reason);
+        nextErrors[key] =
+          result.reason?.response?.data?.message || "Something went wrong";
+        console.error(`${key} failed:`, result.reason);
       }
-      if (bannerData.status === "fulfilled") {
-        setBanner(bannerData.value);
-      } else {
-        setError("Something went wrong");
-        console.error("Banner failed: ", bannerData.reason);
-      }
-      if (resumeData.status === "fulfilled") {
-        setResume(resumeData.value);
-      } else {
-        setError("Something went wrong");
-        console.error("Resume failed: ", resumeData.reason);
-      }
-
-      setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-      console.error("Failed to load global data:", err);
-    }
+    });
+    setErrors(nextErrors);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -61,7 +49,8 @@ export const DataProvider = ({ children }) => {
         banner,
         resume,
         loading,
-        error,
+        error: errors.bio || null,
+        errors,
         refetch: loadGlobalData,
       }}
     >

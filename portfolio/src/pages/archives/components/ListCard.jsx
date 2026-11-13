@@ -62,7 +62,7 @@ function ListCard({ project, index }) {
         <div className="flex flex-col items-end gap-2">
           {project.liveUrl && (
             <Link
-              to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+              to={`/project/live-preview/${project.slug}`}
               className="flex items-center gap-2 text-xs tracking-widest uppercase px-4 py-2.5
               text-gray-400 hover:text-green-500 transition-colors duration-300"
             >

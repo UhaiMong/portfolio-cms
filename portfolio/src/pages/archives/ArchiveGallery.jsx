@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "preact/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiGrid, FiList } from "react-icons/fi";
 import { getProjects } from "../../services/portfolioService";
@@ -10,7 +10,8 @@ import useFetch from "../../hooks/useFetch";
 import Breadcrumbs from "../../components/ui/BreadCrumbs";
 import ErrorState from "../../components/ui/ErrorState";
 import Pagination from "../../components/ui/Pagination";
-import { useEffect } from "preact/hooks";
+import Seo from "../../components/Seo";
+import { SITE } from "../../config/site";
 
 // Stagger container
 const containerVariants = {
@@ -20,46 +21,43 @@ const containerVariants = {
 
 // Main Component
 export default function ArchiveGallery() {
-  const [page, setPage] = useState(1);
   const limit = 9;
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    pages: 1,
-    limit: 9,
-  });
-  // const [loading, setLoading] = useState(true);
-
-  const { data, loading, error, refetch } = useFetch(
-    getProjects,
-    { page, limit },
-    [page],
-  );
-
-  const [hovered, setHovered] = useState(null);
-  const [selected, setSelected] = useState(null);
+  const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState("grid");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [categories, setCategories] = useState([]);
+
+  const category = activeCategory === "All" ? undefined : activeCategory;
+  const { data, loading, error, refetch } = useFetch(
+    getProjects,
+    { page, limit, category },
+    [page, category],
+  );
 
   const projects = data?.projects || [];
-  const paginationMeta = data?.pagination;
-  if (paginationMeta) {
-    setPagination(paginationMeta) || { total: 0, page: 1, pages: 1, limit };
-  }
+  const pagination = data?.pagination || { total: 0, page, pages: 1, limit };
 
+  // No categories endpoint yet, so collect them from every page fetched while unfiltered.
   useEffect(() => {
-    refetch({ page, limit });
-  }, [page]);
-  const categories = [
-    ...new Set(projects.map((p) => p?.category).filter(Boolean)),
-  ];
+    if (category || !projects.length) return;
+    setCategories((prev) => {
+      const next = new Set(prev);
+      projects.forEach((p) => p?.category && next.add(p.category));
+      return next.size === prev.length ? prev : [...next];
+    });
+  }, [data]);
 
-  const filtered =
-    activeCategory === "All"
-      ? projects
-      : projects.filter((p) => p?.category === activeCategory);
+  const onCategoryChange = (cat) => {
+    setActiveCategory(cat);
+    setPage(1);
+  };
   return (
     <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-20 px-4">
+      <Seo
+        title="All Work"
+        description={`Selected projects and case studies by ${SITE.name}.`}
+        path="/archives"
+      />
       <div className="max-w-7xl mx-auto">
         <Breadcrumbs />
         {/* ── Header ── */}
@@ -146,7 +144,7 @@ export default function ArchiveGallery() {
                 <CategoryFilter
                   categories={categories}
                   active={activeCategory}
-                  onChange={setActiveCategory}
+                  onChange={onCategoryChange}
                 />
               )}
             </div>
@@ -185,7 +183,7 @@ export default function ArchiveGallery() {
                   : "flex flex-col gap-4"
               }
             >
-              {filtered.map((project, i) =>
+              {projects.map((project, i) =>
                 viewMode === "grid" ? (
                   <GridCard key={project._id} project={project} index={i} />
                 ) : (

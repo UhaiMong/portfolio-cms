@@ -15,7 +15,7 @@ import BackgroundGridBluePrint from "./ui/BackgroundGridBluePrint";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/projects", label: "Projects" },
+  { to: "/archives", label: "All Work" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },

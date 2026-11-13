@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { getBlogBySlug, getBlogs } from "../../../services/portfolioService";
 import useFetch from "../../../hooks/useFetch";
 import ErrorState from "../../../components/ui/ErrorState";
-import { formatDate } from "../../../utils/helpers";
+import { formatDate, slugify } from "../../../utils/helpers";
 import {
   FiClock,
   FiEye,
@@ -21,6 +21,8 @@ import TableOfContents from "./TableOfContents";
 import DetailSkeleton from "./DetailSkeleton";
 import RelatedCard from "./RelatedCard";
 import Breadcrumbs from "../../../components/ui/BreadCrumbs";
+import Seo, { blogPostingJsonLd } from "../../../components/Seo";
+import { SITE } from "../../../config/site";
 
 //  Main component
 export default function BlogDetails() {
@@ -33,7 +35,21 @@ export default function BlogDetails() {
   const { data: allData } = useFetch(getBlogs, {}, []);
 
   const [copied, setCopied] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [bookmarks, setBookmarks] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("blog-bookmarks")) || [];
+    } catch {
+      return [];
+    }
+  });
+  const bookmarked = bookmarks.includes(slug);
+  const toggleBookmark = () => {
+    const next = bookmarked
+      ? bookmarks.filter((s) => s !== slug)
+      : [...bookmarks, slug];
+    setBookmarks(next);
+    localStorage.setItem("blog-bookmarks", JSON.stringify(next));
+  };
   const [activeId, setActiveId] = useState("");
   const [headings, setHeadings] = useState([]);
   const contentRef = useRef(null);
@@ -56,15 +72,21 @@ export default function BlogDetails() {
   const prev = idx > 0 ? sorted[idx - 1] : null;
   const next = idx < sorted.length - 1 ? sorted[idx + 1] : null;
 
-  // Extract headings for ToC from rendered content
+  // Extract headings for ToC — stable slug IDs so anchors can be shared
   useEffect(() => {
     if (!contentRef.current) return;
     const els = contentRef.current.querySelectorAll("h2, h3");
+    const used = new Set();
     const list = [];
-    els.forEach((el, i) => {
-      if (!el.id) el.id = `heading-${i}`;
+    els.forEach((el) => {
+      const base = slugify(el.textContent || "section") || "section";
+      let id = base;
+      let n = 2;
+      while (used.has(id)) id = `${base}-${n++}`;
+      used.add(id);
+      el.id = id;
       list.push({
-        id: el.id,
+        id,
         text: el.textContent,
         level: el.tagName === "H2" ? 2 : 3,
       });
@@ -99,6 +121,18 @@ export default function BlogDetails() {
 
   return (
     <div className="w-full bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+      {blog && !loading && !error ? (
+        <Seo
+          title={blog.title}
+          description={blog.excerpt || SITE.description}
+          path={`/blog/${blog.slug}`}
+          image={blog.thumbnail || SITE.image}
+          type="article"
+          jsonLd={blogPostingJsonLd(blog)}
+        />
+      ) : error ? (
+        <Seo title="Post not found" path={`/blog/${slug}`} noindex />
+      ) : null}
       <div className="min-h-screen">
         <ReadingProgress />
         {/* Back nav */}
@@ -174,6 +208,7 @@ export default function BlogDetails() {
                     <button
                       onClick={handleCopy}
                       title="Copy link"
+                      aria-label="Copy link"
                       className="w-8 h-8 rounded-lg flex items-center justify-center
                       border border-black/8 dark:border-white/8
                     
@@ -184,8 +219,10 @@ export default function BlogDetails() {
                       {copied ? <FiCheck size={13} /> : <FiShare2 size={13} />}
                     </button>
                     <button
-                      onClick={() => setBookmarked((b) => !b)}
+                      onClick={toggleBookmark}
                       title="Bookmark"
+                      aria-label={bookmarked ? "Remove bookmark" : "Bookmark"}
+                      aria-pressed={bookmarked}
                       className={`w-8 h-8 rounded-lg flex items-center justify-center
                       border transition-all duration-300
                       ${
@@ -302,7 +339,9 @@ export default function BlogDetails() {
                         {copied ? "Copied" : "Share"}
                       </button>
                       <button
-                        onClick={() => setBookmarked((b) => !b)}
+                        onClick={toggleBookmark}
+                        aria-label={bookmarked ? "Remove bookmark" : "Bookmark"}
+                        aria-pressed={bookmarked}
                         className={`flex items-center gap-1.5 text-xs transition-colors duration-300
                         ${bookmarked ? "text-black dark:text-white" : "hover:text-black dark:hover:text-white"}`}
                       >

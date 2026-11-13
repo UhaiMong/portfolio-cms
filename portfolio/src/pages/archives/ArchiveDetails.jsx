@@ -23,6 +23,8 @@ import TechBadge from "./components/TechBadge";
 import RichTextContent from "../../components/ui/RichTextContent";
 import ErrorState from "../../components/ui/ErrorState";
 import { Lock } from "lucide-react";
+import Seo, { creativeWorkJsonLd } from "../../components/Seo";
+import { SITE } from "../../config/site";
 
 // Main Component
 export default function ProjectGalleryDetails() {
@@ -52,6 +54,17 @@ export default function ProjectGalleryDetails() {
 
   return (
     <div className="relative">
+      {project && !loading ? (
+        <Seo
+          title={project.title}
+          description={project.description || SITE.description}
+          path={`/archives/${project.slug}`}
+          image={project.thumbnail || SITE.image}
+          jsonLd={creativeWorkJsonLd(project)}
+        />
+      ) : !loading && !project ? (
+        <Seo title="Project not found" path={`/archives/${slug}`} noindex />
+      ) : null}
       {/* Lightbox */}
       <AnimatePresence>
         {lightbox && (
@@ -146,13 +159,13 @@ export default function ProjectGalleryDetails() {
                 <div className="flex flex-wrap items-center gap-2">
                   {project.liveUrl && (
                     <Link
-                      to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+                      to={`/project/live-preview/${project.slug}`}
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-brand-primary to-indigo-800 text-white text-sm font-semibold"
                     >
                       <FiExternalLink size={12} /> Live Preview
                     </Link>
                   )}
-                  {project.githubUrl && project.isPrivate ? (
+                  {project.isPrivate ? (
                     <button
                       disabled
                       title="Private Repository"
@@ -160,7 +173,7 @@ export default function ProjectGalleryDetails() {
                     >
                       <Lock className="w-3.5" /> Private
                     </button>
-                  ) : (
+                  ) : project.githubUrl && (
                     <a
                       href={project.githubUrl}
                       target="_blank"
@@ -360,13 +373,13 @@ export default function ProjectGalleryDetails() {
                       </h3>
                       {project.liveUrl && (
                         <Link
-                          to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+                          to={`/project/live-preview/${project.slug}`}
                           className="flex items-center gap-2 tracking-widest uppercase text-sm text-green-500 hover:text-green-600 font-medium transition-colors"
                         >
                           <FiExternalLink size={12} /> Live Preview
                         </Link>
                       )}
-                      {project.githubUrl && project.isPrivate ? (
+                      {project.isPrivate ? (
                         <button
                           disabled
                           title="Private Repository"
@@ -374,7 +387,7 @@ export default function ProjectGalleryDetails() {
                         >
                           <Lock className="w-[13px]" /> Private
                         </button>
-                      ) : (
+                      ) : project.githubUrl && (
                         <a
                           href={project.githubUrl}
                           target="_blank"
@@ -392,11 +405,19 @@ export default function ProjectGalleryDetails() {
           </article>
         </section>
       ) : error ? (
-        <ErrorState message={error} onRetry={refetch} />
+        <div className="pt-28">
+          <ErrorState message={error} onRetry={refetch} />
+        </div>
       ) : (
-        <div>Empty!</div>
+        <div className="pt-40 pb-24 flex flex-col items-center gap-4 text-center">
+          <h1 className="text-2xl font-bold">Project not found</h1>
+          <Link to="/archives" className="text-sm underline underline-offset-4">
+            Browse all work
+          </Link>
+        </div>
       )}
       {/* Navigation */}
+      {project && !loading && (
       <div className="max-w-4xl mx-auto flex items-center justify-center gap-4">
         {prev ? (
           <Link
@@ -408,7 +429,7 @@ export default function ProjectGalleryDetails() {
                 loading="lazy"
                 className="w-full h-30 rounded-md object-cover"
                 src={prev?.thumbnail}
-                alt=""
+                alt={`Previous project: ${prev?.title}`}
               />
               <span className="text-xs font-bold">{prev?.title}</span>
             </div>
@@ -427,13 +448,14 @@ export default function ProjectGalleryDetails() {
                 loading="lazy"
                 className="w-full h-30 rounded-md object-cover"
                 src={next?.thumbnail}
-                alt=""
+                alt={`Next project: ${next?.title}`}
               />
               <span className="text-xs font-bold">{next?.title}</span>
             </div>
           </Link>
         )}
       </div>
+      )}
     </div>
   );
 }

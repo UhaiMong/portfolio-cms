@@ -122,7 +122,7 @@ function ProjectDetail({ project, onClose }) {
       <div className="flex gap-3 mt-auto pt-4 border-t border-black/5 dark:border-white/5">
         {project.liveUrl && (
           <Link
-            to={`/project/live-preview/${encodeURIComponent(project?.liveUrl)}`}
+            to={`/project/live-preview/${project.slug}`}
             className="flex items-center gap-2 text-xs tracking-widest uppercase px-4 py-2.5
               hover:bg-black/80 dark:hover:bg-white/80
               transition-all duration-300"

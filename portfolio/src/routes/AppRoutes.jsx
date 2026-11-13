@@ -11,16 +11,18 @@ import ProjectGalleryGemini from "../pages/archives/ArchiveGemini";
 import ProjectGalleryDetailsGemini from "../pages/archives/ArchiveGeminiDetails";
 import ArrchiveDetails from "../pages/archives/ArchiveDetails";
 import LivePreview from "../pages/livePreview/LivePreview";
+import RouteError from "../pages/RouteError";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
       { path: "archives", element: <ArchiveGallery /> },
-      { path: "project/live-preview/*", element: <LivePreview /> },
+      { path: "project/live-preview/:slug", element: <LivePreview /> },
       { path: "archives/:slug", element: <ArrchiveDetails /> },
       { path: "blog", element: <Blog /> },
       { path: "contact", element: <Contact /> },

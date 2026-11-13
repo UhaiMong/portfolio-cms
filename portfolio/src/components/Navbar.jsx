@@ -13,6 +13,7 @@ const navLinks = [
   { to: "/archives", label: "All Work" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
 ];
 
 const socialIcon = (platform = "") => {
@@ -48,8 +49,11 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    if (open) window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
     };
   }, [open]);
 
@@ -188,21 +192,25 @@ export default function Navbar() {
                 exit={{ x: "100%" }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 onClick={(e) => e.stopPropagation()}
-                className="fixed top-0 right-0 h-full w-80 z-999
-                  border-l border-black/5 dark:border-white/60
+                aria-label="Main navigation"
+                className="fixed top-0 right-0 h-full w-80 max-w-[85vw] z-999
+                  bg-gray-100 dark:bg-slate-950
+                  text-gray-900 dark:text-gray-100
+                  border-l border-black/10 dark:border-white/10
                   flex flex-col p-8 shadow-2xl"
               >
                 {/* Panel header */}
                 <div className="flex items-center justify-between mb-12">
-                  <span className="text-xs tracking-[0.3em] uppercase text-white/80">
+                  <span className="text-xs tracking-[0.3em] uppercase text-black/60 dark:text-white/60">
                     Menu
                   </span>
                   <motion.button
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     transition={{ duration: 0.2 }}
                     onClick={() => setOpen(false)}
+                    aria-label="Close menu"
                     className="p-2 rounded-lg
-                       text-white/70 hover:text-white/90
+                      text-black/60 hover:text-black dark:text-white/70 dark:hover:text-white
                       transition-colors duration-200"
                   >
                     <HiX size={20} />
@@ -227,7 +235,7 @@ export default function Navbar() {
                           py-4 border-b border-black/5 dark:border-white/5
                           text-2xl font-bold tracking-tight uppercase
                           transition-all duration-300
-                          ${isActive ? "text-white/80 dark:text-white/30 underline" : "text-white/30 dark:text-white/80"}`
+                          ${isActive ? "text-black dark:text-white underline underline-offset-8" : "text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white"}`
                         }
                       >
                         <span>{link.label}</span>
@@ -245,7 +253,7 @@ export default function Navbar() {
 
                 {/* Panel footer */}
                 <div className="pt-8 border-t border-black/5 dark:border-white/5">
-                  <p className="text-xs tracking-[0.3em] uppercase text-white/80 mb-4">
+                  <p className="text-xs tracking-[0.3em] uppercase text-black/60 dark:text-white/60 mb-4">
                     Connect
                   </p>
                   <div className="flex gap-4">
@@ -258,7 +266,7 @@ export default function Navbar() {
                           target="_blank"
                           rel="noreferrer"
                           whileHover={{ scale: 1.15, y: -2 }}
-                          className="text-white/70 hover:text-white/90
+                          className="text-black/60 hover:text-black dark:text-white/70 dark:hover:text-white
                             transition-colors duration-300"
                           aria-label={s.platform}
                         >
@@ -288,7 +296,7 @@ export default function Navbar() {
                         />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                       </span>
-                      <span className="text-xs text-white/70 hover:text-white/90">
+                      <span className="text-xs text-black/60 dark:text-white/70">
                         Available for work
                       </span>
                     </motion.div>
