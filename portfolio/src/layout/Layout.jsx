@@ -5,13 +5,15 @@ import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ui/ScrollToTop";
 import ChatBot from "../pages/chatBoot/ChatBoot";
 import Cursor from "../components/ui/Cursor";
+import CommandPalette from "../components/CommandPalette";
 
 const Layout = () => {
   return (
-    <div>
+    <div className="page-surface min-h-screen">
       <ScrollRestoration />
       <Toaster position="bottom-center" />
       <Cursor />
+      <CommandPalette />
       <Navbar />
       <Outlet />
       <Footer />

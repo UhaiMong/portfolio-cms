@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-sitemap.mjs",
+    "build": "vite build && node scripts/generate-sitemap.mjs && node scripts/prerender-meta.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
+    "prerender": "node scripts/prerender-meta.mjs",
+    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "axios": "^1.13.5",
     "dompurify": "^3.3.3",
     "framer-motion": "^12.23.25",
@@ -18,13 +19,13 @@
     "preact": "^10.27.2",
     "react-hot-toast": "^2.6.0",
     "react-icons": "^5.6.0",
-    "react-masonry-css": "^1.0.16",
-    "react-router-dom": "^7.10.1",
-    "typewriter-effect": "^2.22.0"
+    "react-router-dom": "^7.10.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@preact/preset-vite": "^2.10.2",
     "@tailwindcss/vite": "^4.1.17",
+    "eslint": "^10.14.0",
     "tailwindcss": "^4.1.17",
     "vite": "^7.2.4"
   }

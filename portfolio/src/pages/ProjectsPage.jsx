@@ -86,7 +86,7 @@ export default function ProjectsPage({ standalone = true }) {
   const projects = all.filter((p) => p !== project).slice(0, 3);
 
   return (
-    <div className="w-full min-h-screen bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 overflow-hidden relative transition-colors duration-300">
+    <div className="w-full min-h-screen page-surface overflow-hidden relative transition-colors duration-300">
       {/* Background Technology Grid Blueprint System */}
       <BackgroundGridBluePrint />
       {project && (
@@ -101,9 +101,8 @@ export default function ProjectsPage({ standalone = true }) {
           <div className="text-center">
             <SectionHeading
               label="Portfolio"
-              title="Load All Creatives"
-              subtitle="Production-ready applications engineered and developed with
-              architectural integrity"
+              title="Selected work"
+              subtitle="Production apps and experiments built with clear architecture and polished UI."
             />
           </div>
         )}

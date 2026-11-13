@@ -213,49 +213,25 @@ export default function Hero() {
   const marqueeIcons = skillIcons.length ? [...skillIcons, ...skillIcons] : [];
 
   return (
-    <div className="relative bg-gray-200 dark:bg-slate-950 transition-colors duration-500">
+    <div className="relative page-surface-hero transition-colors duration-500">
       <section
         ref={sectionRef}
         className="relative w-full min-h-screen overflow-hidden flex flex-col"
       >
-        {/* ================= BACKGROUND LAYER (z-0, behind everything) ================= */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          {/* Base gradient wash */}
-          <div className="absolute inset-0 bg-linear-to-br from-gray-200 via-indigo-50 to-violet-50 dark:from-slate-950 dark:via-indigo-950 dark:to-slate-950" />
-
-          {/* Floating gradient orbs */}
+          <div className="hero-orb-a absolute -top-32 -left-24 w-104 h-104 sm:w-lg sm:h-lg rounded-full blur-3xl bg-cyan-400/25 dark:bg-cyan-500/15" />
+          <div className="hero-orb-b absolute -bottom-24 -right-24 w-md h-112 sm:w-136 sm:h-136 rounded-full blur-3xl bg-sky-300/20 dark:bg-sky-500/10" />
           <div
-            className="hero-orb-a absolute -top-32 -left-24 w-104 h-104 sm:w-lg sm:h-lg rounded-full blur-3xl
-            bg-linear-to-br from-violet-400/40 via-fuchsia-400/25 to-amber-300/20
-            dark:from-violet-600/35 dark:via-fuchsia-500/20 dark:to-amber-400/10"
-          />
-          <div
-            className="hero-orb-b absolute -bottom-24 -right-24 w-md h-112 sm:w-136 sm:h-136 rounded-full blur-3xl
-            bg-linear-to-tr from-cyan-300/30 via-indigo-300/30 to-violet-400/20
-            dark:from-cyan-500/20 dark:via-indigo-500/25 dark:to-violet-600/25"
-          />
-
-          {/* Subtle dot-grid texture for a "code" feel */}
-          <div
-            className="absolute inset-0 opacity-[0.07] dark:opacity-[0.08] text-indigo-500"
+            className="absolute inset-0 opacity-[0.07] text-accent"
             style={{
               backgroundImage:
                 "radial-gradient(currentColor 1px, transparent 1px)",
               backgroundSize: "28px 28px",
             }}
           />
-
-          {/* Wireframe cube shapes - dev / tech motif, pure CSS rotation */}
-          <WireCube className="absolute right-[6%] top-[14%] w-28 h-28 lg:w-40 lg:h-40 hidden md:block text-violet-500 dark:text-violet-300" />
-          <WireCube className="hero-cube-reverse absolute left-[6%] bottom-[16%] w-20 h-20 lg:w-28 lg:h-28 hidden lg:block text-cyan-500 dark:text-cyan-300" />
+          <WireCube className="absolute right-[6%] top-[14%] w-28 h-28 lg:w-40 lg:h-40 hidden md:block text-accent" />
+          <WireCube className="hero-cube-reverse absolute left-[6%] bottom-[16%] w-20 h-20 lg:w-28 lg:h-28 hidden lg:block text-accent/70" />
         </div>
-
-        {/* ================= READABILITY OVERLAY (z-[1]) ================= */}
-        <div
-          className="absolute inset-0 z-1 pointer-events-none
-          bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(255,255,255,0.55)_75%,rgba(255,255,255,0.85)_100%)]
-          dark:bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(2,6,23,0.55)_75%,rgba(2,6,23,0.9)_100%)]"
-        />
 
         {/* ================= MAIN CONTENT (centered, z-10) ================= */}
         <motion.div
@@ -268,21 +244,16 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-xs tracking-[0.4em] uppercase mb-6
-              text-violet-600 dark:text-violet-300 font-semibold"
+              className="text-xs tracking-[0.35em] uppercase mb-6 text-accent font-semibold"
             >
               {greeting}
             </motion.p>
 
-            {/* Name */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight mb-4
-              uppercase bg-linear-to-r from-violet-600 via-fuchsia-500 to-amber-500
-              dark:from-violet-300 dark:via-fuchsia-300 dark:to-amber-200
-              bg-clip-text text-transparent drop-shadow-sm"
+              className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight mb-4 uppercase text-ink"
             >
               {name}
             </motion.h1>
@@ -296,12 +267,13 @@ export default function Hero() {
             >
               <span className="w-6 h-px bg-slate-400 dark:bg-white/30" />
               <span
-                className="text-sm tracking-widest uppercase font-bold
-              min-h-6 text-cyan-700 dark:text-cyan-300"
+                className="text-sm tracking-widest uppercase font-bold min-h-6 text-accent"
+                aria-hidden="true"
               >
                 {typed}
                 <span className="inline-block w-0.5 h-4 bg-current ml-0.5 animate-pulse align-middle" />
               </span>
+              <span className="sr-only">{typingTexts[0]}</span>
               <span className="w-6 h-px bg-slate-400 dark:bg-white/30" />
             </motion.div>
 
@@ -310,8 +282,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-base md:text-lg max-w-xl leading-relaxed mb-10
-              text-slate-600 dark:text-slate-300"
+              className="text-base md:text-lg max-w-xl leading-relaxed mb-10 text-ink-muted"
             >
               {description}
             </motion.p>
@@ -340,7 +311,7 @@ export default function Hero() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
-                <span className="text-xs tracking-widest uppercase text-slate-600 dark:text-slate-300">
+                <span className="text-xs tracking-widest uppercase text-ink-muted">
                   Available for work
                 </span>
               </motion.div>
@@ -362,10 +333,8 @@ export default function Hero() {
             { num: bio?.skills?.length || "15+", label: "Technologies" },
           ].map(({ num, label }) => (
             <div key={label}>
-              <p className="text-3xl font-bold leading-none text-slate-900 dark:text-white">
-                {num}
-              </p>
-              <p className="text-xs tracking-widest uppercase mt-1 text-slate-500 dark:text-slate-400">
+              <p className="text-3xl font-bold leading-none text-ink">{num}</p>
+              <p className="text-xs tracking-widest uppercase mt-1 text-ink-faint">
                 {label}
               </p>
             </div>
@@ -381,10 +350,9 @@ export default function Hero() {
             className="relative z-10 w-full pb-10 sm:pb-12"
           >
             <p
-              className="text-center text-xs tracking-[0.4em] uppercase mb-5
-            text-slate-500 dark:text-slate-400 font-semibold"
+              className="text-center text-xs tracking-[0.3em] uppercase mb-5 text-ink-faint font-semibold"
             >
-              Skilled At_:
+              Tech stack
             </p>
 
             {/* Fixed-but-responsive centered width */}
@@ -493,14 +461,8 @@ function CTAButton({ btn, index, resume }) {
 const btnClass = (isPrimary) =>
   isPrimary
     ? `px-8 py-3.5 text-sm tracking-widest uppercase font-medium rounded-full
-       text-white shadow-lg shadow-violet-500/30
-       bg-linear-to-r from-violet-600 via-fuchsia-500 to-amber-500
-       hover:shadow-violet-500/50 hover:brightness-110
-       dark:shadow-violet-400/20 dark:hover:shadow-violet-400/40
+       text-white bg-accent hover:bg-accent-strong shadow-lg shadow-cyan-500/20
        transition-all duration-300`
     : `px-8 py-3.5 text-sm tracking-widest uppercase font-medium rounded-full
-       border border-slate-300 dark:border-white/20
-       text-slate-600 dark:text-white/70
-       hover:border-violet-500 hover:text-violet-600
-       dark:hover:border-violet-300 dark:hover:text-violet-200
+       border border-line text-ink-muted hover:border-accent hover:text-accent
        transition-all duration-300`;

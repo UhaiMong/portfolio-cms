@@ -61,7 +61,7 @@ export default function Footer() {
     "Focus on building clean, high-performance applications with elegant UI.";
 
   return (
-    <footer className="w-full h-auto bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
+    <footer className="w-full h-auto page-surface-muted text-ink">
       <div className="relative border-t border-black/10 dark:border-white/70 overflow-hidden">
         {/* Subtle background grid */}
         <BackgroundGridBluePrint />

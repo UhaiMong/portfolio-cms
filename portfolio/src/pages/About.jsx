@@ -28,7 +28,7 @@ export default function About({ standalone = true }) {
   const isAboutPage = useLocation().pathname === "/about";
 
   return (
-    <div className="w-full h-auto bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
+    <div className="w-full h-auto page-surface">
       {isAboutPage && (
         <Seo
           title="About"

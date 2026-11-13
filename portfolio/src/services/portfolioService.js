@@ -1,65 +1,47 @@
-import api from "./api";
+import api, { cachedGet } from "./api";
 
-// Banner
-export const getBanner = async () => {
-  const res = await api.get("/banner");
-  return res.data.data;
-};
+export const getBanner = () => cachedGet("/banner", null, { key: "banner" });
+export const getBio = () => cachedGet("/bio", null, { key: "bio" });
+export const getContext = () => cachedGet("/context", null, { key: "context" });
 
-// Bio
-export const getBio = async () => {
-  const res = await api.get("/bio");
-  return res.data.data;
-};
-// Context
-export const getContext = async () => {
-  const res = await api.get("/context");
-  return res.data.data;
-};
+export const getProjects = async (params = {}) =>
+  cachedGet("/projects", params, {
+    key: `projects:${JSON.stringify(params)}`,
+    ttl: 2 * 60 * 1000,
+  });
 
-// Projects
-export const getProjects = async (params = {}) => {
-  const res = await api.get("/projects", { params });
-  return res.data.data || res.data;
-};
+export const getProjectStats = () =>
+  cachedGet("/projects/stats", null, { key: "project-stats" });
 
-export const getProjectStats = async () => {
-  const res = await api.get("/projects/stats");
-  return res.data.data;
-};
+export const getProjectBySlug = (slug) =>
+  cachedGet(`/projects/${slug}`, null, {
+    key: `project:${slug}`,
+    ttl: 2 * 60 * 1000,
+  });
 
-export const getProjectBySlug = async (slug) => {
-  const res = await api.get(`/projects/${slug}`);
-  return res.data.data;
-};
-export const getArchiveDetailsBySlug = async (slug) => {
-  const res = await api.get(`/projects/archive/${slug}`);
-  return res.data.data;
-};
+export const getArchiveDetailsBySlug = (slug) =>
+  cachedGet(`/projects/archive/${slug}`, null, {
+    key: `archive:${slug}`,
+    ttl: 2 * 60 * 1000,
+  });
 
-// Blog
-export const getBlogs = async (params = {}) => {
-  const res = await api.get("/blog", { params });
-  return res.data.data || res.data;
-};
+export const getBlogs = (params = {}) =>
+  cachedGet("/blog", params, {
+    key: `blogs:${JSON.stringify(params)}`,
+    ttl: 2 * 60 * 1000,
+  });
 
-export const getBlogBySlug = async (slug) => {
-  const res = await api.get(`/blog/${slug}`);
-  return res.data.data || res.data;
-};
+export const getBlogBySlug = (slug) =>
+  cachedGet(`/blog/${slug}`, null, {
+    key: `blog:${slug}`,
+    ttl: 2 * 60 * 1000,
+  });
 
-export const getBlogTags = async () => {
-  const res = await api.get("/blog/tags");
-  return res.data.data;
-};
+export const getBlogTags = () => cachedGet("/blog/tags", null, { key: "blog-tags" });
 
-// Resume
-export const getActiveResume = async () => {
-  const res = await api.get("/resume");
-  return res.data.data;
-};
+export const getActiveResume = () =>
+  cachedGet("/resume", null, { key: "resume" });
 
-// Contact
 export const submitContact = async (formData) => {
   const res = await api.post("/contact", formData);
   return res.data;

@@ -25,7 +25,7 @@ const socialIcon = (platform = "") => {
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const { bio } = useData();
+  const { bio, resume } = useData();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -69,72 +69,74 @@ export default function Navbar() {
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
           ${
             scrolled
-              ? "bg-gray-200 dark:bg-gray-900 backdrop-blur-xl border-b border-black/5 dark:border-white/5 shadow-sm"
+              ? "bg-surface/90 backdrop-blur-xl border-b border-line shadow-sm"
               : "bg-transparent"
           }`}
       >
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="group flex items-center gap-2">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400 }}
-              className="relative"
-            >
-              <span
-                className="text-xl font-bold tracking-tight uppercase
-                text-black dark:text-white
-                transition-all duration-500"
-              >
-                {bio?.name?.split(" ")[0] || "Portfolio"}
-              </span>
-              <span
-                className="text-xl font-bold tracking-tight uppercase ml-1
-                grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100
-                text-indigo-500 transition-all duration-500"
-              >
-                {bio?.name?.split(" ").slice(1).join(" ") || ""}
-              </span>
-              <span
-                className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-px
-                bg-black dark:bg-white transition-all duration-500"
-              />
-            </motion.div>
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between gap-6">
+          <Link to="/" className="group flex items-center gap-2 shrink-0">
+            <span className="font-display text-xl font-bold tracking-tight uppercase text-ink">
+              {bio?.name?.split(" ")[0] || "Portfolio"}
+            </span>
+            <span className="font-display text-xl font-bold tracking-tight uppercase text-accent opacity-70 group-hover:opacity-100 transition-opacity">
+              {bio?.name?.split(" ").slice(1).join(" ") || ""}
+            </span>
           </Link>
 
-          {/* Desktop right controls */}
-          <div className="flex items-center gap-3">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === "/"}
+                className={({ isActive }) =>
+                  `px-3 py-2 text-sm tracking-wide transition-colors duration-200
+                  ${
+                    isActive
+                      ? "text-ink font-semibold"
+                      : "text-ink-muted hover:text-ink"
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
             {quickSocials.map((s) => {
               const Icon = socialIcon(s.platform);
               return Icon ? (
-                <motion.a
+                <a
                   key={s.platform}
                   href={s.url}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  className="hidden md:flex p-2 rounded-lg
-                    text-black/30 dark:text-white/30
-                    hover:text-black dark:hover:text-white
-                    transition-colors duration-300"
+                  className="hidden md:flex p-2 rounded-lg text-ink-faint hover:text-ink transition-colors"
                   aria-label={s.platform}
                 >
                   <Icon size={16} />
-                </motion.a>
+                </a>
               ) : null;
             })}
 
-            {/* Theme toggle */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            {resume?.fileUrl && (
+              <a
+                href={resume.fileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="hidden md:inline-flex items-center px-3 py-1.5 rounded-lg text-xs tracking-widest uppercase
+                  border border-line text-ink hover:border-accent hover:text-accent transition-colors"
+              >
+                Resume
+              </a>
+            )}
+
+            <button
+              type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 rounded-lg
-                text-black/40 dark:text-white/40
-                hover:text-black dark:hover:text-white
-                hover:bg-black/5 dark:hover:bg-white/5
-                transition-all duration-300"
+              className="p-2 rounded-lg text-ink-muted hover:text-ink hover:bg-accent-soft transition-all"
             >
               <AnimatePresence mode="wait">
                 <motion.span
@@ -143,29 +145,21 @@ export default function Navbar() {
                   animate={{ opacity: 1, rotate: 0, scale: 1 }}
                   exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
                   transition={{ duration: 0.2 }}
+                  className="inline-flex"
                 >
-                  {theme === "dark" ? (
-                    <FaSun size={16} />
-                  ) : (
-                    <FaMoon size={16} />
-                  )}
+                  {theme === "dark" ? <FaSun size={16} /> : <FaMoon size={16} />}
                 </motion.span>
               </AnimatePresence>
-            </motion.button>
+            </button>
 
-            {/* Menu toggle */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
+              type="button"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className="p-2 rounded-lg
-                text-black dark:text-white
-                hover:bg-black/5 dark:hover:bg-white/5
-                transition-all duration-300"
+              className="lg:hidden p-2 rounded-lg text-ink hover:bg-accent-soft transition-all"
             >
-              <CgMenuGridO size={24} />
-            </motion.button>
+              <CgMenuGridO size={22} />
+            </button>
           </div>
         </div>
       </motion.header>

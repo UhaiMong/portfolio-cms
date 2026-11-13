@@ -52,7 +52,7 @@ export default function ArchiveGallery() {
     setPage(1);
   };
   return (
-    <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-20 px-4">
+    <section className="min-h-screen page-surface py-20 px-4">
       <Seo
         title="All Work"
         description={`Selected projects and case studies by ${SITE.name}.`}

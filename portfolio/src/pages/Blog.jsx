@@ -59,7 +59,7 @@ export default function Blog() {
   });
 
   return (
-    <div className="w-full bg-gray-200  text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900">
+    <div className="w-full page-surface">
       <Seo
         title="Blog"
         description={`Articles and notes by ${SITE.name} on code, design, and building products.`}

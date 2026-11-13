@@ -63,7 +63,7 @@ const validate = ({ name, email, subject, message }) => {
   return e;
 };
 
-const INIT = { name: "", email: "", subject: "", message: "" };
+const INIT = { name: "", email: "", subject: "", message: "", website: "" };
 
 const fieldCls = (err) =>
   `w-full bg-transparent placeholder:text-slate-700 dark:placeholder:text-slate-300 border-b py-3 text-sm text-slate-800 dark:text-slate-200 outline-none transition-all duration-300
@@ -94,6 +94,12 @@ export default function Contact({ standalone = true }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    // Honeypot — bots fill hidden fields; humans never see this.
+    if (form.website) {
+      setStatus("success");
+      setForm(INIT);
+      return;
+    }
     const errs = validate(form);
     if (Object.keys(errs).length) {
       setErrors(errs);
@@ -103,7 +109,8 @@ export default function Contact({ standalone = true }) {
     setStatus("loading");
     setApiErr("");
     try {
-      await submitContact(form);
+      const { website: _honeypot, ...payload } = form;
+      await submitContact(payload);
       setStatus("success");
       setForm(INIT);
     } catch (err) {
@@ -124,11 +131,11 @@ export default function Contact({ standalone = true }) {
     "Project Inquiry",
     "Freelance Work",
     "Job Opportunity",
-    "Just saying HI,",
+    "Just saying hi",
   ];
 
   return (
-    <div className="bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-linear-to-b from-slate-900 via-indigo-950 to-slate-900 w-full h-auto">
+    <div className="page-surface w-full h-auto">
       {isContactPage && (
         <Seo
           title="Contact"
@@ -345,7 +352,23 @@ export default function Contact({ standalone = true }) {
                           </span>
                         </div>
 
-                        <div className="p-4 flex flex-col gap-4">
+                        <div className="relative p-4 flex flex-col gap-4">
+                          <div
+                            className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+                            aria-hidden="true"
+                          >
+                            <label>
+                              Website
+                              <input
+                                type="text"
+                                name="website"
+                                tabIndex={-1}
+                                autoComplete="off"
+                                value={form.website}
+                                onInput={onChange("website")}
+                              />
+                            </label>
+                          </div>
                           {/* To: */}
                           <div className="py-2 border-b border-black/5 dark:border-white/5 text-sm">
                             <span className="font-medium text-slate-900 dark:text-slate-300">

@@ -223,14 +223,23 @@ export default function ProjectGalleryDetails() {
                         {/* Long description rendered from TinyMCE HTML */}
                         {project.longDescription ? (
                           <div>
+                            <p className="text-[10px] tracking-[0.25em] uppercase text-ink-faint mb-4">
+                              Case study
+                            </p>
                             <RichTextContent
                               content={project.longDescription}
                             />
                           </div>
                         ) : (
-                          <p className="text-gray-500 dark:text-gray-400 italic text-sm">
-                            No detailed description provided.
-                          </p>
+                          <div className="rounded-2xl border border-line bg-surface-elevated p-6 text-sm text-ink-muted space-y-3">
+                            <p className="font-display text-ink font-semibold">
+                              Case study coming soon
+                            </p>
+                            <p>
+                              Ideal write-up structure for this project: problem,
+                              role, approach, trade-offs, and measurable results.
+                            </p>
+                          </div>
                         )}
                       </motion.div>
                     ) : (

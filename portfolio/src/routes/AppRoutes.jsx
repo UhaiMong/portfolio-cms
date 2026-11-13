@@ -1,17 +1,25 @@
+import { lazy, Suspense } from "preact/compat";
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Home from "../pages/Home";
 import About from "../pages/About";
-import Blog from "../pages/Blog";
-import NotFound from "../pages/NotFound";
-import BlogDetails from "../pages/blog/detailPage/BlogDetail";
 import Contact from "../pages/Contact";
-import ArchiveGallery from "../pages/archives/ArchiveGallery";
-import ProjectGalleryGemini from "../pages/archives/ArchiveGemini";
-import ProjectGalleryDetailsGemini from "../pages/archives/ArchiveGeminiDetails";
-import ArrchiveDetails from "../pages/archives/ArchiveDetails";
-import LivePreview from "../pages/livePreview/LivePreview";
 import RouteError from "../pages/RouteError";
+import PageLoader from "../components/ui/PageLoader";
+
+// Heavy / less-visited routes — split from the home bundle
+const Blog = lazy(() => import("../pages/Blog"));
+const BlogDetails = lazy(() => import("../pages/blog/detailPage/BlogDetail"));
+const ArchiveGallery = lazy(() => import("../pages/archives/ArchiveGallery"));
+const ArchiveDetails = lazy(() => import("../pages/archives/ArchiveDetails"));
+const LivePreview = lazy(() => import("../pages/livePreview/LivePreview"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+
+const withSuspense = (Component) => (
+  <Suspense fallback={<PageLoader title="Loading" />}>
+    <Component />
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
@@ -21,13 +29,13 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
-      { path: "archives", element: <ArchiveGallery /> },
-      { path: "project/live-preview/:slug", element: <LivePreview /> },
-      { path: "archives/:slug", element: <ArrchiveDetails /> },
-      { path: "blog", element: <Blog /> },
       { path: "contact", element: <Contact /> },
-      { path: "blog/:slug", element: <BlogDetails /> },
-      { path: "*", element: <NotFound /> },
+      { path: "archives", element: withSuspense(ArchiveGallery) },
+      { path: "project/live-preview/:slug", element: withSuspense(LivePreview) },
+      { path: "archives/:slug", element: withSuspense(ArchiveDetails) },
+      { path: "blog", element: withSuspense(Blog) },
+      { path: "blog/:slug", element: withSuspense(BlogDetails) },
+      { path: "*", element: withSuspense(NotFound) },
     ],
   },
 ]);
