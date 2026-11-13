@@ -11,6 +11,7 @@ import api from "../../services/api";
 import AIMessage from "./AIMessage";
 import TypingDots from "./TypingDots";
 import { toast } from "react-hot-toast";
+import { MessageCircleQuestion } from "lucide-react";
 
 const WELCOME =
   "Hi! I'm an AI assistant for this portfolio. Ask me anything about skills, experience, or projects! ✨";
@@ -208,7 +209,7 @@ export default function ChatBot() {
                 exit={{ rotate: -90, opacity: 0 }}
                 transition={{ duration: 0.18 }}
               >
-                <HiSparkles size={22} />
+                <MessageCircleQuestion size={22} />
               </motion.span>
             )}
           </AnimatePresence>

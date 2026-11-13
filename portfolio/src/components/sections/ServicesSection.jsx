@@ -34,7 +34,7 @@ export default function ServicesSection({ standalone = true }) {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           {standalone && (
             <div className="text-center">
               <SectionHeading
@@ -53,7 +53,7 @@ export default function ServicesSection({ standalone = true }) {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.3 }}
-            className="mt-8 inline-flex p-1 rounded-xl bg-slate-200/80 border border-slate-300/70 dark:bg-slate-900/80 dark:border-slate-800 backdrop-blur-md"
+            className="inline-flex p-1 rounded-xl bg-slate-200/80 border border-slate-300/70 dark:bg-slate-900/80 dark:border-slate-800 backdrop-blur-md"
           >
             <button
               onClick={() => setActiveTab("packages")}
